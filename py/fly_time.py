@@ -30,19 +30,35 @@ if abs(flySpeed) <= abs(trainASpeed) or abs(flySpeed) <= abs(trainBSpeed) or abs
     print("The fly can't reach the other train!")  # Ha a vonatok gyorsabbak, lehagyják a szúnyogot
     exit()
 
-for i in range(0, int(sys.argv[6])):
-    relativeWindSpeed = windSpeed if i % 2 == 0 else -windSpeed # Pozitív: jobbra, negatív: balra
-    relativeFlySpeed = flySpeed + relativeWindSpeed # A szúnyog sebessége ebben a körben
+flyDirection = 1
+	
+trainAX = 0
+trainBX = trainsDistance
+flyX = 0
 
-    lastFlySpeed = relativeFlySpeed
-    tripTime = trainsDistance / relativeFlySpeed # Ehhez a körhöz szükséges idő
-     
-    totalTripTime += tripTime # Teljes repülési idő
-    
-    trainsDistance -= tripTime * trainASpeed # Vonatok új távolsága
-    trainsDistance -= tripTime * trainBSpeed # Vonatok új távolsága
+timestep = 1 / int(sys.argv[6])
 
-    totalDistance += tripTime * relativeFlySpeed # Teljes megett út
+while trainsDistance > 0:
+	trainAMovement = trainASpeed * timestep
+	trainBMovement = -trainBSpeed * timestep
+	
+	relativeWindSpeed = windSpeed * flyDirection
+	if flyX >= trainBX:
+		flyDirection = -1
+				
+	if flyX <= trainAX:
+		flyDirection = 1
+				
+	flyMovement = (flySpeed + relativeWindSpeed) * flyDirection * timestep
+	
+	trainAX += trainAMovement
+	trainBX += trainBMovement
+	
+	trainsDistance -= abs(trainAMovement)
+	trainsDistance -= abs(trainBMovement)
+	
+	totalDistance += abs(flyMovement)
+	totalTripTime += timestep
 
 x = totalTripTime / totalDistance # Szúnyog átlagsebessége
 

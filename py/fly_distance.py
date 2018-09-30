@@ -29,25 +29,38 @@ if abs(flySpeed) <= abs(trainASpeed) or abs(flySpeed) <= abs(trainBSpeed) or abs
     print("The fly can't reach the other train!")  # Ha a vonatok gyorsabbak, lehagyják a szúnyogot
     exit()
 
-lastFlySpeed = 0
+flyDirection = 1
+	
+trainAX = 0
+trainBX = trainsDistance
+flyX = 0
 
-for i in range(0, int(sys.argv[6])):
-    relativeWindSpeed = windSpeed if i % 2 == 0 else -windSpeed # Pozitív: jobbra, negatív: balra
-    relativeFlySpeed = flySpeed + relativeWindSpeed # Szúnyog sebessége ebben a fordulatban
+timestep = 1 / int(sys.argv[6])
 
-    lastFlySpeed = relativeFlySpeed
-    tripTime = trainsDistance / relativeFlySpeed # Ehhez a körhöz szükséges idő
-     
-    totalTripTime += tripTime # Teljes repülési idő
-    
-    trainsDistance -= tripTime * trainASpeed # Vonatok új távolsága
-    trainsDistance -= tripTime * trainBSpeed # Vonatok új távolsága
-
-    totalDistance += tripTime * relativeFlySpeed # Ennek a körnek a távolsága
+while trainsDistance > 0:
+	trainAMovement = trainASpeed * timestep
+	trainBMovement = -trainBSpeed * timestep
+	
+	relativeWindSpeed = windSpeed * flyDirection
+	if flyX >= trainBX:
+		flyDirection = -1
+				
+	if flyX <= trainAX:
+		flyDirection = 1
+				
+	flyMovement = (flySpeed + relativeWindSpeed) * flyDirection * timestep
+	
+	trainAX += trainAMovement
+	trainBX += trainBMovement
+	
+	trainsDistance -= abs(trainAMovement)
+	trainsDistance -= abs(trainBMovement)
+	
+	totalDistance += abs(flyMovement)
+	totalTripTime += timestep
 
 if totalDistance != totalDistance or totalDistance < 0:
     print("The fly is blown away by the wind! (-)")
     exit()
 
 print("{} km, simple (no wind speed): {} km".format(round(totalDistance), round(originalTrainsDistance / (trainASpeed + trainBSpeed) * flySpeed)))
-print("The fly was flying for: {} hours, last speed: {}".format(round(totalTripTime), round(lastFlySpeed)))
