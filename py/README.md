@@ -32,3 +32,18 @@ python3 fly_time.py [emberASebesseg] [emberBSebesseg] [emberekTavolsaga] [szunyo
 - **szelsebesseg**: A szél sebessége. Pozitív érték jobbra fúj, negatív balra
 - **pontossag**: Mivel a számítás egy végtelen sorozat, ezért nagyobb értékek pontosabb megközelítést adnak *(Ajánlott 1000)*
 - **celtavolsag**: A távolság amit a szúnyog meg szeretne tenni
+
+## fly_animation.py
+Animáció a szúnyog útjához  
+  
+```
+python3 fly_animation.py [emberASebesseg] [emberBSebesseg] [emberekTavolsaga] [szunyogSebessege] [szelsebesseg] [fps] [indulasiIdo]
+```  
+  
+- **emberASebesseg**: Az *A* ember sebessége
+- **emberBSebesseg**: Az *B* ember sebessége
+- **emberekTavolsaga**: Az emberek távolsága
+- **szunyogSebessege**: A szúnyog sebessége
+- **szelsebesseg**: A szél sebessége. Pozitív érték jobbra fúj, negatív balra
+- **fps**: Animáció FPS száma
+- **indulasiIdo**: Idő amikor elindul a szúnyog (`fly_time.py`)
