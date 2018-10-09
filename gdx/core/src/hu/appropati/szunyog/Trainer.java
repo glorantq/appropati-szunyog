@@ -1,62 +1,141 @@
 package hu.appropati.szunyog;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class Trainer extends ApplicationAdapter {
-	private SpriteBatch batch;
-	private Texture img;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-	private Viewport fitViewport;
-	private Viewport fillViewport;
-	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+import hu.appropati.szunyog.graphics.TextureManager;
+import hu.appropati.szunyog.graphics.text.Font;
+import hu.appropati.szunyog.graphics.text.TextRenderer;
+import hu.appropati.szunyog.screens.AssetLoaderScreen;
+import hu.appropati.szunyog.screens.CrashScreen;
+import hu.appropati.szunyog.screens.TestScreen;
+import lombok.Getter;
 
-		fitViewport = new FitViewport(720, 1280);
-		fillViewport = new FillViewport(720, 1280);
-	}
+public class Trainer extends Game {
+    public static int WIDTH = 720;
+    public static int HEIGHT = 1280;
 
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    private static Trainer INSTANCE;
 
+    public static Trainer getTrainer() {
+        if (INSTANCE == null) {
+            INSTANCE = new Trainer();
+        }
 
-		fillViewport.apply(true);
-		batch.setProjectionMatrix(fillViewport.getCamera().combined);
-        batch.begin();
-		batch.setColor(0.0f, 1.0f, 0.0f, 1.0f);
-		batch.draw(img, 0, 0, fillViewport.getWorldWidth(), fillViewport.getWorldHeight());
-		batch.end();
+        return INSTANCE;
+    }
 
-		fitViewport.apply(true);
-		batch.setProjectionMatrix(fitViewport.getCamera().combined);
-        batch.begin();
-		batch.setColor(1.0f, 0.0f, 0.0f, 1.0f);
-		batch.draw(img, fitViewport.getWorldWidth() / 2 - img.getWidth() / 2, fitViewport.getWorldHeight() / 2 - img.getHeight() / 2);
+    private Trainer() { }
 
-		batch.end();
-	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-		img.dispose();
-	}
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    @Getter
+    private Screen currentScreen;
+
+    @Getter
+    private SpriteBatch spriteBatch;
+
+    @Getter
+    private Viewport viewport;
+
+    @Getter
+    private TextureManager textureManager;
+
+    @Getter
+    private AssetManager assetManager;
+
+    @Getter
+    private TextRenderer textRenderer;
+
+    @Override
+    public void create() {
+        logger.info("Starting up!");
+
+        spriteBatch = new SpriteBatch();
+        viewport = new ExtendViewport(WIDTH, HEIGHT);
+
+        assetManager = new AssetManager();
+        textureManager = TextureManager.create(assetManager);
+
+        textRenderer = new TextRenderer(spriteBatch);
+        textRenderer.registerFont(new Font("Roboto", "fonts/roboto/Roboto-Regular.ttf", "fonts/roboto/Roboto-Italic.ttf", "fonts/roboto/Roboto-Bold.ttf"));
+
+        logger.info("Starting asset loading!");
+        setScreen(new AssetLoaderScreen(new TestScreen(), new String[0], new String[0], new String[0]));
+    }
+
+    @Override
+    public void render() {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        viewport.apply(true);
+        spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+        spriteBatch.begin();
+
+        if (currentScreen != null) {
+            currentScreen.render(Gdx.graphics.getDeltaTime());
+        }
+
+        spriteBatch.end();
+    }
+
+    @Override
+    public void dispose() {
+        spriteBatch.dispose();
+    }
 
     @Override
     public void resize(int width, int height) {
-        fillViewport.update(width, height);
-        fitViewport.update(width, height);
+        viewport.update(width, height);
+
+        if(currentScreen != null) {
+            currentScreen.resize(width, height);
+        }
+    }
+
+    @Override
+    public void pause() {
+        logger.info("Paused!");
+
+        if(currentScreen != null) {
+            currentScreen.pause();
+        }
+    }
+
+    @Override
+    public void resume() {
+        logger.info("Resumed!");
+
+        if(currentScreen != null) {
+            currentScreen.resume();
+        }
+    }
+
+    @Override
+    public void setScreen(Screen screen) {
+        if (currentScreen != null) {
+            currentScreen.hide();
+        }
+
+        currentScreen = screen;
+
+        if (currentScreen != null) {
+            currentScreen.show();
+            currentScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+            logger.debug("Changing to: {}", currentScreen.getClass().getCanonicalName());
+        } else {
+            logger.debug("Removed current screen!");
+        }
     }
 }

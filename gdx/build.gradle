@@ -21,6 +21,12 @@ allprojects {
     ext {
         appName = "appropati-szunyog"
         gdxVersion = '1.9.8'
+
+        slf4j_version = "1.7.25"
+        logback_version = "1.2.3"
+        lombok_version = "1.18.2"
+        gson_version = "2.8.5"
+        caffeine_version = "2.6.2"
     }
 
     repositories {
@@ -38,6 +44,8 @@ project(":desktop") {
     dependencies {
         compile project(":core")
 
+        compile "ch.qos.logback:logback-classic:$logback_version"
+
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
@@ -48,6 +56,11 @@ project(":core") {
     apply plugin: "java"
 
     dependencies {
+        compile "org.slf4j:slf4j-api:$slf4j_version"
+        compileOnly "org.projectlombok:lombok:$lombok_version"
+        compile "com.google.code.gson:gson:$gson_version"
+        compile "com.github.ben-manes.caffeine:caffeine:$caffeine_version"
+
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     }
@@ -60,6 +73,8 @@ project(":android") {
 
     dependencies {
         compile project(":core")
+
+        compile "org.slf4j:slf4j-android:$slf4j_version"
 
         compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
