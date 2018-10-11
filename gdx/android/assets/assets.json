@@ -1,0 +1,10 @@
+{
+  "textures": [
+    "gui/button_normal.png",
+    "gui/button_hover.png"
+  ],
+
+  "music": [],
+
+  "sound": []
+}

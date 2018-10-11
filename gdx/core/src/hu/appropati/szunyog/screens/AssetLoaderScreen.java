@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 import hu.appropati.szunyog.Trainer;
 import hu.appropati.szunyog.gui.GuiScreen;
+import lombok.Data;
 
 public class AssetLoaderScreen extends GuiScreen {
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -27,12 +28,12 @@ public class AssetLoaderScreen extends GuiScreen {
     private final String[] soundList;
     private final String[] musicList;
 
-    public AssetLoaderScreen(Screen nextScreen, String[] textureList, String[] soundList, String[] musicList) {
+    public AssetLoaderScreen(Screen nextScreen, TextureFileData data) {
         this.nextScreen = nextScreen;
 
-        this.textureList = textureList;
-        this.soundList = soundList;
-        this.musicList = musicList;
+        this.textureList = data.textures;
+        this.soundList = data.sound;
+        this.musicList = data.music;
     }
 
     @Override
@@ -63,5 +64,12 @@ public class AssetLoaderScreen extends GuiScreen {
     @Override
     public void dispose() {
 
+    }
+
+    @Data
+    public static class TextureFileData {
+        private final String[] textures;
+        private final String[] music;
+        private final String[] sound;
     }
 }

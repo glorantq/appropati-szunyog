@@ -3,6 +3,7 @@ package hu.appropati.szunyog.graphics.text;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
@@ -35,6 +36,8 @@ public class Font {
         FreeTypeFontGenerator.FreeTypeFontParameter freeTypeFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         freeTypeFontParameter.size = size;
         freeTypeFontParameter.color = Color.WHITE;
+        freeTypeFontParameter.minFilter = Texture.TextureFilter.Linear;
+        freeTypeFontParameter.magFilter = Texture.TextureFilter.Linear;
 
         BitmapFont font = generator.generateFont(freeTypeFontParameter);
 
@@ -43,8 +46,6 @@ public class Font {
     }
 
     private FileHandle getHandle(FontStyle style) {
-        FileHandle handle;
-
         switch (style) {
             case NORMAL:
                 return normalHandle;
