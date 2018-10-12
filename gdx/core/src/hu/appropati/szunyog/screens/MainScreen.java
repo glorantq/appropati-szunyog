@@ -36,7 +36,7 @@ public class MainScreen extends MenuScreen {
                 viewport.getWorldHeight() / 2 - buttonSize.y - 5,
                 buttonSize.x, buttonSize.y, "Megtett Út", GuiButton.Style.builder().build());
 
-        GuiButton settingsButton = new GuiButton(5, 5, 64, 64, "", GuiButton.Style.builder().build(), textureManager.getTexture("gui/settings.png"));
+        GuiButton settingsButton = new GuiButton(5, 5, 72, 72, "", GuiButton.Style.builder().build(), textureManager.getTexture("gui/settings.png"));
 
         createElement(timeButton);
         createElement(distanceButton);

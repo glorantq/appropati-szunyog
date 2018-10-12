@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import hu.appropati.szunyog.Trainer;
+import hu.appropati.szunyog.dialog.DialogBox;
+import hu.appropati.szunyog.dialog.GuiDialog;
 import hu.appropati.szunyog.graphics.text.FontStyle;
 import hu.appropati.szunyog.gui.GuiScreen;
 import hu.appropati.szunyog.gui.elements.GuiButton;
@@ -39,5 +41,35 @@ public class TestScreen extends GuiScreen {
     @Override
     public void hide() {
 
+    }
+
+    public static class TestDialogBox extends GuiDialog {
+        private Texture texture = new Texture("badlogic.jpg");
+
+        @Override
+        public void show() {
+            super.show();
+            System.err.println("Open");
+            GuiButton button = new GuiButton(500, 500, 100, 100, "TESTING", GuiButton.Style.builder().build());
+            createElement(button);
+
+            button.onClick((longPress) -> Trainer.getTrainer().closeDialogBox());
+        }
+
+        @Override
+        public void render(SpriteBatch spriteBatch) {
+            drawElements(spriteBatch);
+        }
+
+        @Override
+        public void close() {
+            super.close();
+            System.err.println("Close");
+        }
+
+        @Override
+        public boolean isCloseable() {
+            return true;
+        }
     }
 }

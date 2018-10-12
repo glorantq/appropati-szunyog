@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,9 @@ public class TextureManager {
     @Getter
     private final Texture defaultTexture;
 
+    @Getter
+    private final TextureRegion white;
+
     private TextureManager(AssetManager assetManager) {
         this.logger = LoggerFactory.getLogger(getClass());
         this.assetManager = assetManager;
@@ -48,6 +52,12 @@ public class TextureManager {
         defaultTexturePixmap.fillRectangle(32, 32, 32, 32);
 
         this.defaultTexture = new Texture(defaultTexturePixmap);
+
+        Pixmap whitePixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        whitePixmap.setColor(1f, 1f, 1f, 1f);
+        whitePixmap.fillRectangle(0, 0, 1, 1);
+
+        this.white = new TextureRegion(new Texture(whitePixmap));
     }
 
     public Texture getTexture(String name) {

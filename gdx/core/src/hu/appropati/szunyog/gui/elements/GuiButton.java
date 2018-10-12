@@ -78,8 +78,8 @@ public class GuiButton implements GuiElement, InputHandler {
         textSize = textRenderer.getTextSize(text, style.fontName, style.fontStyle, style.fontSize);
 
         TextureManager textureManager = trainer.getTextureManager();
-        normalTexture = new NinePatch(textureManager.getTexture("gui/button_normal.png"), 10, 10, 10, 10);
-        hoverTexture = new NinePatch(textureManager.getTexture("gui/button_hover.png"), 10, 10, 10, 10);
+        normalTexture = new NinePatch(textureManager.getTexture("gui/button_normal.png"), 40, 40, 40, 40);
+        hoverTexture = new NinePatch(textureManager.getTexture("gui/button_hover.png"), 40, 40, 40, 40);
 
         if(icon != null) {
             float scale;
@@ -163,10 +163,6 @@ public class GuiButton implements GuiElement, InputHandler {
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
-        if(!bounds.contains(x, y)) {
-            return false;
-        }
-
         touching = false;
 
         return true;

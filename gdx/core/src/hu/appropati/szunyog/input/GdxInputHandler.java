@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import hu.appropati.szunyog.Trainer;
+import hu.appropati.szunyog.dialog.DialogBox;
 
 public class GdxInputHandler implements GestureDetector.GestureListener, InputProcessor {
     private final Viewport viewport = Trainer.getTrainer().getViewport();
+    private final Trainer trainer = Trainer.getTrainer();
     private final List<InputHandler> inputHandlers = new CopyOnWriteArrayList<>();
 
     public void addInputHandler(InputHandler handler) {
@@ -32,7 +34,13 @@ public class GdxInputHandler implements GestureDetector.GestureListener, InputPr
         Vector3 coordinates = viewport.unproject(new Vector3(v, v1, 0));
 
         synchronized (inputHandlers) {
-            inputHandlers.forEach((it) -> it.tap(coordinates.x, coordinates.y, i, i1));
+            for(InputHandler handler : inputHandlers) {
+                if(trainer.getCurrentDialogBox() != null && !(handler instanceof DialogBox)) {
+                    continue;
+                }
+
+                handler.tap(coordinates.x, coordinates.y, i, i1);
+            }
         }
 
         return false;
@@ -43,7 +51,13 @@ public class GdxInputHandler implements GestureDetector.GestureListener, InputPr
         Vector3 coordinates = viewport.unproject(new Vector3(v, v1, 0));
 
         synchronized (inputHandlers) {
-            inputHandlers.forEach((it) -> it.longPress(coordinates.x, coordinates.y));
+            for(InputHandler handler : inputHandlers) {
+                if(trainer.getCurrentDialogBox() != null && !(handler instanceof DialogBox)) {
+                    continue;
+                }
+
+                handler.longPress(coordinates.x, coordinates.y);
+            }
         }
 
         return false;
@@ -54,8 +68,16 @@ public class GdxInputHandler implements GestureDetector.GestureListener, InputPr
         Vector3 coordinates = viewport.unproject(new Vector3(i, i1, 0));
 
         synchronized (inputHandlers) {
-            return inputHandlers.stream().anyMatch((it) -> it.touchDown((int) coordinates.x, (int) coordinates.y, i2, i3));
+            for(InputHandler handler : inputHandlers) {
+                if(trainer.getCurrentDialogBox() != null && !(handler instanceof DialogBox)) {
+                    continue;
+                }
+
+                handler.touchDown((int) coordinates.x, (int) coordinates.y, i, i1);
+            }
         }
+
+        return false;
     }
 
     @Override
@@ -63,8 +85,16 @@ public class GdxInputHandler implements GestureDetector.GestureListener, InputPr
         Vector3 coordinates = viewport.unproject(new Vector3(i, i1, 0));
 
         synchronized (inputHandlers) {
-            return inputHandlers.stream().anyMatch((it) -> it.touchUp((int) coordinates.x, (int) coordinates.y, i2, i3));
+            for(InputHandler handler : inputHandlers) {
+                if(trainer.getCurrentDialogBox() != null && !(handler instanceof DialogBox)) {
+                    continue;
+                }
+
+                handler.touchUp((int) coordinates.x, (int) coordinates.y, i, i1);
+            }
         }
+
+        return false;
     }
 
     @Override
