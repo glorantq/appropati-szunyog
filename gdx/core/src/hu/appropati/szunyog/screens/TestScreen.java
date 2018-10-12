@@ -30,7 +30,7 @@ public class TestScreen extends GuiScreen {
         createElement(button);
 
         button.onClick((longPress) -> {
-            System.err.println("Kalesz " + longPress);
+            trainer.setScreen(new MainScreen());
         });
 
         createElement(new GuiButton(300, 300, 120, 120, "X", GuiButton.Style.builder().fontSize(36).fontStyle(FontStyle.BOLD).fontColor(Color.RED).build()));
@@ -38,11 +38,6 @@ public class TestScreen extends GuiScreen {
 
     @Override
     public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
 
     }
 }

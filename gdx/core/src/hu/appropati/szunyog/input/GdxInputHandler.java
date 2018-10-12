@@ -6,14 +6,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import hu.appropati.szunyog.Trainer;
 
 public class GdxInputHandler implements GestureDetector.GestureListener, InputProcessor {
     private final Viewport viewport = Trainer.getTrainer().getViewport();
-    private final List<InputHandler> inputHandlers = new ArrayList<>();
+    private final List<InputHandler> inputHandlers = new CopyOnWriteArrayList<>();
 
     public void addInputHandler(InputHandler handler) {
         synchronized (inputHandlers) {

@@ -2,6 +2,7 @@ package hu.appropati.szunyog;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -119,6 +120,10 @@ public class Trainer extends Game {
         }
 
         spriteBatch.end();
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
+            resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        }
     }
 
     @Override
@@ -128,7 +133,9 @@ public class Trainer extends Game {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height);
+        viewport.update(width, height, true);
+
+        super.resize(width, height);
 
         if(currentScreen != null) {
             currentScreen.resize(width, height);
@@ -157,6 +164,7 @@ public class Trainer extends Game {
     public void setScreen(Screen screen) {
         if (currentScreen != null) {
             currentScreen.hide();
+            currentScreen.dispose();
         }
 
         currentScreen = screen;

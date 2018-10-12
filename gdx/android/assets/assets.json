@@ -1,7 +1,10 @@
 {
   "textures": [
     "gui/button_normal.png",
-    "gui/button_hover.png"
+    "gui/button_hover.png",
+    "gui/settings.png",
+    "gui/logo.png",
+    "gui/background.jpg"
   ],
 
   "music": [],

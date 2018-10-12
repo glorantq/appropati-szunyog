@@ -11,6 +11,8 @@ import lombok.Getter;
 
 @Getter
 public class Font {
+    private static final String CHARSET = "0123456789qwertzuiopőúasdfghjkléáűíyxcvbnmQWERTZUIOPŐÚASDFGHJKLÉÁŰÍYXCVBNM,.-?:_;>*\\|$ß@&#><{}'\"+!%/=()©";
+
     private final String name;
 
     private final FileHandle normalHandle;
@@ -35,6 +37,7 @@ public class Font {
 
         FreeTypeFontGenerator.FreeTypeFontParameter freeTypeFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         freeTypeFontParameter.size = size;
+        freeTypeFontParameter.characters = CHARSET;
         freeTypeFontParameter.color = Color.WHITE;
         freeTypeFontParameter.minFilter = Texture.TextureFilter.Linear;
         freeTypeFontParameter.magFilter = Texture.TextureFilter.Linear;

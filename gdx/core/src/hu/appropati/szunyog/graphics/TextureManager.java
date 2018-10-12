@@ -51,6 +51,13 @@ public class TextureManager {
     }
 
     public Texture getTexture(String name) {
+        Texture texture = getTexture0(name);
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        return texture;
+    }
+
+    private Texture getTexture0(String name) {
         if(assetManager.isLoaded(name)) {
             logger.debug("Loaded texture: {}", name);
             return assetManager.get(name, Texture.class);

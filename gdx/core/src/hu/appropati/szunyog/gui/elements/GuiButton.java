@@ -17,21 +17,30 @@ import hu.appropati.szunyog.gui.GuiElement;
 import hu.appropati.szunyog.input.GdxInputHandler;
 import hu.appropati.szunyog.input.InputHandler;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 public class GuiButton implements GuiElement, InputHandler {
     private GdxInputHandler inputHandler;
     private TextRenderer textRenderer;
 
-    private final float x;
-    private final float y;
+    @Setter @Getter
+    private float x;
+
+    @Setter @Getter
+    private float y;
+
+    @Getter
     private final float width;
+
+    @Getter
     private final float height;
     private final String text;
     private Texture icon = null;
 
     private final Style style;
 
-    private final Rectangle bounds;
+    private Rectangle bounds;
     private Vector2 textSize;
     private Vector2 imageSize;
 
@@ -79,12 +88,12 @@ public class GuiButton implements GuiElement, InputHandler {
             if(width > height) {
                 scale = icon.getWidth() / icon.getHeight();
 
-                imageSize.y = height / 2;
+                imageSize.y = height / 2 + 5;
                 imageSize.x = imageSize.y * scale;
             } else {
                 scale = icon.getHeight() / icon.getWidth();
 
-                imageSize.x = width / 2;
+                imageSize.x = width / 2 + 5;
                 imageSize.y = imageSize.x * scale;
             }
         }
@@ -97,6 +106,8 @@ public class GuiButton implements GuiElement, InputHandler {
 
     @Override
     public void render(SpriteBatch spriteBatch, float delta) {
+        bounds = new Rectangle(x, y, width, height);
+
         if(touching) {
             hoverTexture.draw(spriteBatch, x, y, width, height);
         } else {
@@ -106,7 +117,14 @@ public class GuiButton implements GuiElement, InputHandler {
         textRenderer.drawCenteredText(text, x + width / 2, y + height / 2, style.fontSize, style.fontName, style.fontStyle, style.fontColor);
 
         if(icon != null) {
-            spriteBatch.draw(icon, x + width / 2 - textSize.x / 2 - imageSize.x - 5, y + height / 2 - imageSize.y / 2, imageSize.x, imageSize.y);
+            Vector2 iconPosition = new Vector2();
+            if(textSize.x > 0) {
+                iconPosition.set(x + width / 2 - textSize.x / 2 - imageSize.x - 5, y + height / 2 - imageSize.y / 2);
+            } else {
+                iconPosition.set(x + width / 2 - imageSize.x / 2, y + height / 2 - imageSize.y / 2);
+            }
+
+            spriteBatch.draw(icon, iconPosition.x, iconPosition.y, imageSize.x, imageSize.y);
         }
     }
 
