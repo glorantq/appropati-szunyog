@@ -12,7 +12,7 @@ import java.util.List;
 import hu.appropati.szunyog.Trainer;
 
 public abstract class GuiScreen implements Screen {
-    private List<GuiElement> guiElements = new ArrayList<>();
+    public List<GuiElement> guiElements = new ArrayList<>();
 
     @Override
     public void render(float delta) {

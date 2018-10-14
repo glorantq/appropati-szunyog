@@ -27,17 +27,7 @@ public class MenuScreen extends GuiScreen {
         logoTexture = textureManager.getTexture("gui/logo.png");
         backgroundTexture = textureManager.getTexture("gui/background.jpg");
 
-        backgroundSize = new Vector2(backgroundTexture.getWidth(), backgroundTexture.getHeight());
-
-        if(viewport.getWorldWidth() > backgroundTexture.getWidth()) {
-            float ratio = viewport.getWorldWidth() / backgroundTexture.getWidth();
-            backgroundSize.scl(ratio);
-        }
-
-        if(viewport.getWorldHeight() > backgroundTexture.getHeight()) {
-            float ratio = viewport.getWorldHeight() / backgroundTexture.getHeight();
-            backgroundSize.scl(ratio);
-        }
+        scaleBackground();
     }
 
     @Override
@@ -53,20 +43,22 @@ public class MenuScreen extends GuiScreen {
 
     }
 
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-
+    private void scaleBackground() {
         backgroundSize = new Vector2(backgroundTexture.getWidth(), backgroundTexture.getHeight());
 
         if(viewport.getWorldWidth() > backgroundTexture.getWidth()) {
             float ratio = viewport.getWorldWidth() / backgroundTexture.getWidth();
             backgroundSize.scl(ratio);
-        }
-
-        if(viewport.getWorldHeight() > backgroundTexture.getHeight()) {
+        } else if(viewport.getWorldHeight() > backgroundTexture.getHeight()) {
             float ratio = viewport.getWorldHeight() / backgroundTexture.getHeight();
             backgroundSize.scl(ratio);
         }
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+
+        scaleBackground();
     }
 }

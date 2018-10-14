@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import hu.appropati.szunyog.Trainer;
+import hu.appropati.szunyog.calculation.CalculationParameter;
 import hu.appropati.szunyog.graphics.TextureManager;
 import hu.appropati.szunyog.graphics.text.FontStyle;
 import hu.appropati.szunyog.graphics.text.TextRenderer;
@@ -42,14 +43,19 @@ public class MainScreen extends MenuScreen {
         createElement(distanceButton);
         createElement(settingsButton);
 
+        timeButton.onClick((longPress) -> trainer.setScreen(new CalculationDataScreen(CalculationParameter.Type.START_TIME)));
+        distanceButton.onClick((longPress) -> trainer.setScreen(new CalculationDataScreen(CalculationParameter.Type.TARGET_DISTANCE)));
+
         super.show();
     }
 
     @Override
     protected void draw(SpriteBatch spriteBatch) {
         super.draw(spriteBatch);
+
+        textRenderer.drawCenteredText("Mit szeretnél kiszámolni?", viewport.getWorldWidth() / 2, timeButton.getY() + timeButton.getHeight() + 45 , 36, "Maiandra", FontStyle.NORMAL, Color.WHITE);
         drawElements(spriteBatch);
-        textRenderer.drawRightText("Copyright © 2018, Appropati", viewport.getWorldWidth() - 5, 5, 22, "Roboto", FontStyle.NORMAL, Color.WHITE, true);
+        textRenderer.drawRightText("Copyright © 2018, Appropati", viewport.getWorldWidth() - 5, 5, 22, "Maiandra", FontStyle.BOLD, Color.WHITE, true);
     }
 
     @Override

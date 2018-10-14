@@ -174,8 +174,8 @@ public class GuiButton implements GuiElement, InputHandler {
 
     @Builder
     public static class Style {
-        @Builder.Default private String fontName = "Roboto";
-        @Builder.Default private int fontSize = 24;
+        @Builder.Default private String fontName = "Niramit";
+        @Builder.Default private int fontSize = 26;
         @Builder.Default private FontStyle fontStyle = FontStyle.NORMAL;
 
         @Builder.Default private Color fontColor = Color.BLACK;

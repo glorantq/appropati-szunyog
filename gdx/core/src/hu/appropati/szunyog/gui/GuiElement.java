@@ -6,4 +6,9 @@ public interface GuiElement {
     void create();
     void destroy();
     void render(SpriteBatch spriteBatch, float delta);
+
+    float getWidth();
+    float getHeight();
+    float getX();
+    float getY();
 }

@@ -25,9 +25,10 @@ import hu.appropati.szunyog.graphics.TextureManager;
 import hu.appropati.szunyog.graphics.text.Font;
 import hu.appropati.szunyog.graphics.text.TextRenderer;
 import hu.appropati.szunyog.input.GdxInputHandler;
+import hu.appropati.szunyog.input.text.TextInputProvider;
 import hu.appropati.szunyog.screens.AssetLoaderScreen;
 import hu.appropati.szunyog.screens.CrashScreen;
-import hu.appropati.szunyog.screens.TestScreen;
+import hu.appropati.szunyog.screens.MainScreen;
 import lombok.Getter;
 
 public class Trainer extends Game {
@@ -37,8 +38,12 @@ public class Trainer extends Game {
     private static Trainer INSTANCE;
 
     public static Trainer getTrainer() {
+        return INSTANCE;
+    }
+
+    public static Trainer createTrainer(TextInputProvider textInputProvider) {
         if (INSTANCE == null) {
-            INSTANCE = new Trainer();
+            INSTANCE = new Trainer(textInputProvider);
         }
 
         return INSTANCE;
@@ -47,7 +52,9 @@ public class Trainer extends Game {
     private Color gradientTop = new Color(0f, 0f, 0f, 0f);
     private Color gradientBottom = new Color(0f, 0f, 0f, 1f);
 
-    private Trainer() { }
+    private Trainer(TextInputProvider provider) {
+        this.textInputProvider = provider;
+    }
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -75,6 +82,9 @@ public class Trainer extends Game {
     @Getter
     private GdxInputHandler inputHandler;
 
+    @Getter
+    private final TextInputProvider textInputProvider;
+
     @Override
     public void create() {
         logger.info("Starting up!");
@@ -87,6 +97,8 @@ public class Trainer extends Game {
 
         textRenderer = new TextRenderer(spriteBatch);
         textRenderer.registerFont(new Font("Roboto", "fonts/roboto/Roboto-Regular.ttf", "fonts/roboto/Roboto-Italic.ttf", "fonts/roboto/Roboto-Bold.ttf"));
+        textRenderer.registerFont(new Font("Maiandra", "fonts/maiandra/Maiandra GD Regular.ttf", "fonts/maiandra/Maiandra GD Italic.ttf", "fonts/maiandra/Maiandra GD Demi Bold.ttf"));
+        textRenderer.registerFont(new Font("Niramit", "fonts/niramit/Niramit-Regular.ttf", "fonts/niramit/Niramit-Italic.ttf", "fonts/niramit/Niramit-Bold.ttf"));
 
         inputHandler = new GdxInputHandler();
         Gdx.input.setInputProcessor(new InputMultiplexer(new GestureDetector(inputHandler), inputHandler));
@@ -96,7 +108,7 @@ public class Trainer extends Game {
             FileHandle assetsFile = Gdx.files.internal("assets.json");
             String assetsFileContent = assetsFile.readString("UTF-8");
 
-            setScreen(new AssetLoaderScreen(new TestScreen(), new Gson().fromJson(assetsFileContent, AssetLoaderScreen.TextureFileData.class)));
+            setScreen(new AssetLoaderScreen(new MainScreen(), new Gson().fromJson(assetsFileContent, AssetLoaderScreen.TextureFileData.class)));
         } catch (Exception e) {
             openCrashScreen(e);
         }
@@ -134,6 +146,8 @@ public class Trainer extends Game {
         }
 
         if(currentDialogBox != null) {
+            spriteBatch.setColor(1f, 1f, 1f, 1f);
+
             drawGradient(spriteBatch, textureManager.getWhite(), 0, 0,
                     viewport.getWorldWidth(), viewport.getWorldHeight(), gradientTop, gradientBottom, false);
 
