@@ -7,6 +7,6 @@ public interface TextInputProvider {
 
     void registerListener(TextInputListener textInputListener);
     void removeListener(TextInputListener textInputListener);
-    void openTextInput(String placeholder, InputType type, int maxChars);
+    void openTextInput(String placeholder, String text, InputType type, int maxChars);
     void closeTextInput();
 }

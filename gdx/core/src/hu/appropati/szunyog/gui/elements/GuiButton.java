@@ -35,7 +35,9 @@ public class GuiButton implements GuiElement, InputHandler {
 
     @Getter
     private final float height;
-    private final String text;
+
+    @Setter
+    private String text;
     private Texture icon = null;
 
     private final Style style;
@@ -49,6 +51,10 @@ public class GuiButton implements GuiElement, InputHandler {
 
     private Consumer<Boolean> onClick;
     private boolean touching = false;
+
+    @Getter
+    @Setter
+    private boolean visible = true;
 
     public GuiButton(float x, float y, float width, float height, String text, Style style) {
         this.x = x;
@@ -106,6 +112,10 @@ public class GuiButton implements GuiElement, InputHandler {
 
     @Override
     public void render(SpriteBatch spriteBatch, float delta) {
+        if(!visible) {
+            return;
+        }
+
         bounds = new Rectangle(x, y, width, height);
 
         if(touching) {
@@ -130,7 +140,7 @@ public class GuiButton implements GuiElement, InputHandler {
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
-        if(!bounds.contains(x, y) || onClick == null) {
+        if(!bounds.contains(x, y) || onClick == null || !visible) {
             return false;
         }
 
@@ -141,7 +151,7 @@ public class GuiButton implements GuiElement, InputHandler {
 
     @Override
     public boolean longPress(float x, float y) {
-        if(!bounds.contains(x, y) || onClick == null) {
+        if(!bounds.contains(x, y) || onClick == null || !visible) {
             return false;
         }
 
@@ -152,7 +162,7 @@ public class GuiButton implements GuiElement, InputHandler {
 
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
-        if(!bounds.contains(x, y)) {
+        if(!bounds.contains(x, y) || !visible) {
             return false;
         }
 
@@ -173,6 +183,7 @@ public class GuiButton implements GuiElement, InputHandler {
     }
 
     @Builder
+    @Getter
     public static class Style {
         @Builder.Default private String fontName = "Niramit";
         @Builder.Default private int fontSize = 26;

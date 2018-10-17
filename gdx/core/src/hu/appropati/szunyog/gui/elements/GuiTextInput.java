@@ -1,6 +1,5 @@
 package hu.appropati.szunyog.gui.elements;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,7 +26,7 @@ public class GuiTextInput implements GuiElement, InputHandler {
 
         @Override
         public void textUpdated(String text) {
-            if(focusedElement != null) {
+            if (focusedElement != null) {
                 focusedElement.updateText(text);
             }
         }
@@ -37,10 +36,12 @@ public class GuiTextInput implements GuiElement, InputHandler {
     private TextRenderer textRenderer;
     private TextInputProvider textInputProvider;
 
-    @Setter @Getter
+    @Setter
+    @Getter
     private float x;
 
-    @Setter @Getter
+    @Setter
+    @Getter
     private float y;
 
     @Getter
@@ -58,13 +59,22 @@ public class GuiTextInput implements GuiElement, InputHandler {
 
     private NinePatch normalTexture;
 
-    public GuiTextInput(float x, float y, float width, float height, String placeholder, GuiScreen parent) {
+    private final TextInputProvider.InputType type;
+    private final int maxChars;
+
+    @Getter
+    @Setter
+    private boolean visible = true;
+
+    public GuiTextInput(float x, float y, float width, float height, String placeholder, TextInputProvider.InputType type, int maxChars, GuiScreen parent) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.placeholder = placeholder;
+        this.type = type;
         this.parent = parent;
+        this.maxChars = maxChars;
     }
 
     @Override
@@ -80,10 +90,12 @@ public class GuiTextInput implements GuiElement, InputHandler {
         TextureManager textureManager = trainer.getTextureManager();
         normalTexture = new NinePatch(textureManager.getTexture("gui/text_input.png"), 40, 40, 40, 40);
 
-        if(!registeredListener) {
+        if (!registeredListener) {
             registeredListener = true;
             trainer.getTextInputProvider().registerListener(new StaticTextInputHandler());
         }
+
+        bounds = new Rectangle(x, y, width, height);
     }
 
     @Override
@@ -93,11 +105,15 @@ public class GuiTextInput implements GuiElement, InputHandler {
 
     @Override
     public void render(SpriteBatch spriteBatch, float delta) {
+        if (!visible) {
+            return;
+        }
+
         bounds = new Rectangle(x, y, width, height);
 
         normalTexture.draw(spriteBatch, x, y, width, height);
 
-        if(text.isEmpty() && !placeholder.isEmpty() && focusedElement != this) {
+        if (text.isEmpty() && !placeholder.isEmpty() && focusedElement != this) {
             textRenderer.drawCenteredText(placeholder, x + width / 2, y + height / 2 + 3, 26, "Maiandra", FontStyle.NORMAL, Color.LIGHT_GRAY);
         } else {
             textRenderer.drawCenteredText(text, x + width / 2, y + height / 2 + 3, 26, "Maiandra", FontStyle.NORMAL, Color.WHITE);
@@ -105,27 +121,25 @@ public class GuiTextInput implements GuiElement, InputHandler {
     }
 
     private void updateText(String text) {
+        if (!visible) {
+            return;
+        }
+
         this.text = text;
     }
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
-        Gdx.app.log("I", x + " " + y);
-
-        if(bounds.contains(x, y)) {
+        if (visible && bounds.contains(x, y)) {
             focusedElement = this;
-            textInputProvider.openTextInput(placeholder, TextInputProvider.InputType.TEXT, 64);
-
-            Gdx.app.log("T", "Open");
+            textInputProvider.openTextInput(placeholder, text, type, maxChars);
 
             return true;
         }
 
-        if(parent.guiElements.stream().filter(it -> it instanceof GuiTextInput).noneMatch(it -> ((GuiTextInput) it).bounds.contains(x, y))) {
+        if (parent.guiElements.stream().filter(it -> it instanceof GuiTextInput).noneMatch(it -> ((GuiTextInput) it).bounds.contains(x, y))) {
             textInputProvider.closeTextInput();
             focusedElement = null;
-
-            Gdx.app.log("T", "Other");
 
             return true;
         }

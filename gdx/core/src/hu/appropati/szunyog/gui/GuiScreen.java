@@ -8,11 +8,13 @@ import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import hu.appropati.szunyog.Trainer;
 
 public abstract class GuiScreen implements Screen {
     public List<GuiElement> guiElements = new ArrayList<>();
+    private List<GuiElement> hiddenElements = new CopyOnWriteArrayList<>();
 
     @Override
     public void render(float delta) {

@@ -8,10 +8,8 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -20,7 +18,6 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hu.appropati.szunyog.dialog.DialogBox;
 import hu.appropati.szunyog.graphics.TextureManager;
 import hu.appropati.szunyog.graphics.text.Font;
 import hu.appropati.szunyog.graphics.text.TextRenderer;
@@ -49,9 +46,6 @@ public class Trainer extends Game {
         return INSTANCE;
     }
 
-    private Color gradientTop = new Color(0f, 0f, 0f, 0f);
-    private Color gradientBottom = new Color(0f, 0f, 0f, 1f);
-
     private Trainer(TextInputProvider provider) {
         this.textInputProvider = provider;
     }
@@ -60,9 +54,6 @@ public class Trainer extends Game {
 
     @Getter
     private Screen currentScreen;
-
-    @Getter
-    private DialogBox currentDialogBox;
 
     @Getter
     private SpriteBatch spriteBatch;
@@ -145,15 +136,6 @@ public class Trainer extends Game {
             currentScreen.render(Gdx.graphics.getDeltaTime());
         }
 
-        if(currentDialogBox != null) {
-            spriteBatch.setColor(1f, 1f, 1f, 1f);
-
-            drawGradient(spriteBatch, textureManager.getWhite(), 0, 0,
-                    viewport.getWorldWidth(), viewport.getWorldHeight(), gradientTop, gradientBottom, false);
-
-            currentDialogBox.render(spriteBatch);
-        }
-
         spriteBatch.end();
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
@@ -214,38 +196,6 @@ public class Trainer extends Game {
         }
     }
 
-    public void openDialogBox(DialogBox dialogBox) {
-        if(currentDialogBox != null) {
-            logger.warn("Already has a dialog open, trying to close it...");
-            if(currentDialogBox.isCloseable()) {
-                currentDialogBox.close();
-                currentDialogBox = null;
-            } else {
-                throw new RuntimeException("Can't close current dialog box");
-            }
-        }
-
-        inputHandler.touchUp(0, 0, 0, 0);
-
-        currentDialogBox = dialogBox;
-        currentDialogBox.show();
-    }
-
-    public void closeDialogBox() {
-        if(currentDialogBox == null) {
-            return;
-        }
-
-        if(!currentDialogBox.isCloseable()) {
-            return;
-        }
-
-        currentDialogBox.close();
-        currentDialogBox = null;
-
-        inputHandler.touchUp(0, 0, 0, 0);
-    }
-
     private void openCrashScreen(Throwable throwable) {
         if(spriteBatch.isDrawing()) {
             spriteBatch.end();
@@ -260,53 +210,5 @@ public class Trainer extends Game {
         setScreen(new CrashScreen(throwable));
 
         Gdx.input.setInputProcessor(null);
-    }
-
-    private final float[] vertices = new float[20];
-
-    private void drawGradient(SpriteBatch batch,
-                              TextureRegion white,
-                              float x, float y,
-                              float width, float height,
-                              Color colorA, Color colorB,
-                              boolean horizontal) {
-
-        float ca = colorA.toFloatBits();
-        float cb = colorB.toFloatBits();
-        int idx = 0;
-        float u = white.getU();
-        float v = white.getV2();
-        float u2 = white.getU2();
-        float v2 = white.getV();
-
-        //bottom left
-        vertices[idx++] = x;
-        vertices[idx++] = y;
-        vertices[idx++] = horizontal ? ca : cb;
-        vertices[idx++] = u;
-        vertices[idx++] = v;
-
-        //top left
-        vertices[idx++] = x;
-        vertices[idx++] = y + height;
-        vertices[idx++] = ca;
-        vertices[idx++] = u;
-        vertices[idx++] = v2;
-
-        //top right
-        vertices[idx++] = x + width;
-        vertices[idx++] = y + height;
-        vertices[idx++] = horizontal ? cb : ca;
-        vertices[idx++] = u2;
-        vertices[idx++] = v2;
-
-        //bottom right
-        vertices[idx++] = x + width;
-        vertices[idx++] = y;
-        vertices[idx++] = cb;
-        vertices[idx++] = u2;
-        vertices[idx++] = v;
-
-        batch.draw(white.getTexture(), vertices, 0, vertices.length);
     }
 }

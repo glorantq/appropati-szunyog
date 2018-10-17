@@ -10,11 +10,9 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import hu.appropati.szunyog.Trainer;
-import hu.appropati.szunyog.dialog.DialogBox;
 
 public class GdxInputHandler implements GestureDetector.GestureListener, InputProcessor {
     private final Viewport viewport = Trainer.getTrainer().getViewport();
-    private final Trainer trainer = Trainer.getTrainer();
     private final List<InputHandler> inputHandlers = new CopyOnWriteArrayList<>();
 
     public void addInputHandler(InputHandler handler) {
@@ -35,10 +33,6 @@ public class GdxInputHandler implements GestureDetector.GestureListener, InputPr
 
         synchronized (inputHandlers) {
             for(InputHandler handler : inputHandlers) {
-                if(trainer.getCurrentDialogBox() != null && !(handler instanceof DialogBox)) {
-                    continue;
-                }
-
                 handler.tap(coordinates.x, coordinates.y, i, i1);
             }
         }
@@ -52,10 +46,6 @@ public class GdxInputHandler implements GestureDetector.GestureListener, InputPr
 
         synchronized (inputHandlers) {
             for(InputHandler handler : inputHandlers) {
-                if(trainer.getCurrentDialogBox() != null && !(handler instanceof DialogBox)) {
-                    continue;
-                }
-
                 handler.longPress(coordinates.x, coordinates.y);
             }
         }
@@ -69,10 +59,6 @@ public class GdxInputHandler implements GestureDetector.GestureListener, InputPr
 
         synchronized (inputHandlers) {
             for(InputHandler handler : inputHandlers) {
-                if(trainer.getCurrentDialogBox() != null && !(handler instanceof DialogBox)) {
-                    continue;
-                }
-
                 handler.touchDown((int) coordinates.x, (int) coordinates.y, i, i1);
             }
         }
@@ -86,10 +72,6 @@ public class GdxInputHandler implements GestureDetector.GestureListener, InputPr
 
         synchronized (inputHandlers) {
             for(InputHandler handler : inputHandlers) {
-                if(trainer.getCurrentDialogBox() != null && !(handler instanceof DialogBox)) {
-                    continue;
-                }
-
                 handler.touchUp((int) coordinates.x, (int) coordinates.y, i, i1);
             }
         }

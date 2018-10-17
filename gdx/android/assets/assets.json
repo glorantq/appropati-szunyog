@@ -4,7 +4,9 @@
     "gui/button_hover.png",
     "gui/settings.png",
     "gui/logo.png",
-    "gui/background.jpg"
+    "gui/background.jpg",
+    "gui/check.png",
+    "gui/text_input.png"
   ],
 
   "music": [],

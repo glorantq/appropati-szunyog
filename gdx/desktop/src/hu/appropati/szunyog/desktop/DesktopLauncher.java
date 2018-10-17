@@ -31,7 +31,7 @@ public class DesktopLauncher implements TextInputProvider {
     }
 
     @Override
-    public void openTextInput(String placeholder, InputType type, int maxChars) {
+    public void openTextInput(String placeholder, String text, InputType type, int maxChars) {
 
     }
 
