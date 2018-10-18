@@ -52,6 +52,8 @@ while trainsDistance > 0:
 
     trainAX += trainAMovement
     trainBX += trainBMovement
+    
+    flyX += flyMovement
 
     trainsDistance -= abs(trainAMovement)
     trainsDistance -= abs(trainBMovement)

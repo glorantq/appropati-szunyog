@@ -15,7 +15,7 @@ public class MenuScreen extends GuiScreen {
     private Texture backgroundTexture;
     private Vector2 backgroundSize;
 
-    private Texture logoTexture;
+    protected Texture logoTexture;
 
     @Override
     public void show() {
@@ -32,9 +32,17 @@ public class MenuScreen extends GuiScreen {
 
     @Override
     protected void draw(SpriteBatch spriteBatch) {
+        drawBackground(spriteBatch);
+        drawLogo(spriteBatch);
+    }
+
+    protected void drawBackground(SpriteBatch spriteBatch) {
         spriteBatch.setColor(.7f, .7f, .7f, 1f);
         spriteBatch.draw(backgroundTexture, viewport.getWorldWidth() / 2 - backgroundSize.x / 2, viewport.getWorldHeight() / 2 - backgroundSize.y / 2, backgroundSize.x, backgroundSize.y);
         spriteBatch.setColor(1f, 1f, 1f, 1f);
+    }
+
+    protected void drawLogo(SpriteBatch spriteBatch) {
         spriteBatch.draw(logoTexture, viewport.getWorldWidth() / 2 - logoTexture.getWidth() / 2, viewport.getWorldHeight() - logoTexture.getHeight() - 5);
     }
 

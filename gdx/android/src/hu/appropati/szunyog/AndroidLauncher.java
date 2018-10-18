@@ -3,7 +3,9 @@ package hu.appropati.szunyog;
 import android.app.Activity;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +33,9 @@ public class AndroidLauncher extends AndroidApplication implements TextInputProv
 
     float androidHeight = 0;
 
-	@Override
-	protected void onCreate (Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -57,11 +59,11 @@ public class AndroidLauncher extends AndroidApplication implements TextInputProv
             });
         });
 
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		config.useAccelerometer = false;
-		config.useCompass = false;
-		config.useGyroscope = false;
-		config.useRotationVectorSensor = false;
+        AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+        config.useAccelerometer = false;
+        config.useCompass = false;
+        config.useGyroscope = false;
+        config.useRotationVectorSensor = false;
 
         View gameView = initializeForView(Trainer.createTrainer(this), config);
 
@@ -101,16 +103,31 @@ public class AndroidLauncher extends AndroidApplication implements TextInputProv
         });
 
         textInput.setOnKeyListener((view, i, keyEvent) -> {
-            if(keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_ENTER) {
+            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && i == KeyEvent.KEYCODE_ENTER) {
                 closeTextInput();
                 return true;
             }
 
-            broadcastTextChange();
-
             return false;
         });
-	}
+
+        textInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                broadcastTextChange();
+            }
+        });
+    }
 
     @Override
     public void registerListener(TextInputListener textInputListener) {
@@ -124,11 +141,11 @@ public class AndroidLauncher extends AndroidApplication implements TextInputProv
 
     @Override
     public void openTextInput(String placeholder, String text, InputType type, int maxChars) {
-	    runOnUiThread(() -> {
+        runOnUiThread(() -> {
             textInput.setText(text);
             textInput.setHint(placeholder);
 
-            textInput.setFilters(new InputFilter[]{ new InputFilter.LengthFilter(maxChars)});
+            textInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxChars)});
 
             textInput.setInputType(type == InputType.NUMBER ? android.text.InputType.TYPE_CLASS_NUMBER : android.text.InputType.TYPE_CLASS_TEXT);
 
@@ -136,7 +153,7 @@ public class AndroidLauncher extends AndroidApplication implements TextInputProv
             textInput.requestFocus();
 
             changeKeyboard(true);
-	    });
+        });
     }
 
     @Override
@@ -158,7 +175,7 @@ public class AndroidLauncher extends AndroidApplication implements TextInputProv
             view = new View(AndroidLauncher.this);
         }
 
-        if(!show) {
+        if (!show) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         } else {
             imm.showSoftInput(textInput, 0);
@@ -166,6 +183,6 @@ public class AndroidLauncher extends AndroidApplication implements TextInputProv
     }
 
     private void broadcastTextChange() {
-	    textInputListeners.forEach((it) -> it.textUpdated(textInput.getText().toString()));
+        textInputListeners.forEach((it) -> it.textUpdated(textInput.getText().toString()));
     }
 }

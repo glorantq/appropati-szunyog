@@ -1,11 +1,15 @@
 package hu.appropati.szunyog.screens;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import hu.appropati.szunyog.Trainer;
 import hu.appropati.szunyog.calculation.CalculationParameter;
+import hu.appropati.szunyog.graphics.TextureManager;
+import hu.appropati.szunyog.graphics.text.FontStyle;
 import hu.appropati.szunyog.graphics.text.TextRenderer;
 import hu.appropati.szunyog.gui.elements.GuiButton;
 import hu.appropati.szunyog.gui.elements.GuiCheckBox;
@@ -27,7 +31,13 @@ public class CalculationDataScreen extends MenuScreen {
     private GuiTextInput windSpeedInput;
     private GuiCheckBox animationCheckBox;
 
+    private GuiButton nextButton;
+
     private int windDirection = 1;
+
+    private String dataErrorMessage = "";
+
+    private NinePatch errorBackground;
 
     public CalculationDataScreen(CalculationParameter.Type calculationTarget) {
         if(calculationTarget != CalculationParameter.Type.TARGET_DISTANCE && calculationTarget != CalculationParameter.Type.START_TIME) {
@@ -99,7 +109,7 @@ public class CalculationDataScreen extends MenuScreen {
 
         createElement(backButton);
 
-        GuiButton nextButton = new GuiButton(viewport.getWorldWidth() - backButton.getWidth() - 5, 5, backButton.getWidth(), backButton.getHeight(), "Tovább", GuiButton.Style.builder().build());
+        nextButton = new GuiButton(viewport.getWorldWidth() - backButton.getWidth() - 5, 5, backButton.getWidth(), backButton.getHeight(), "Tovább", GuiButton.Style.builder().build());
 
         createElement(nextButton);
 
@@ -113,12 +123,212 @@ public class CalculationDataScreen extends MenuScreen {
                 animationCheckBox.setY(windCheckBox.getY() - 5 - inputHeight / 1.3f);
             }
         });
+
+        TextureManager textureManager = trainer.getTextureManager();
+        errorBackground = new NinePatch(textureManager.getTexture("gui/text_input.png"), 40, 40, 40, 40);
+
+        nextButton.onClick((longPress) -> {
+            boolean isAnimated = animationCheckBox.isChecked();
+
+            if(calculationTarget == CalculationParameter.Type.TARGET_DISTANCE) {
+                if(isAnimated) {
+
+                } else {
+                    calculateTravelDistance();
+                }
+            } else {
+                if(isAnimated) {
+
+                } else {
+                    calculateStartTime();
+                }
+            }
+        });
     }
 
     @Override
     protected void draw(SpriteBatch spriteBatch) {
         super.draw(spriteBatch);
         drawElements(spriteBatch);
+
+        if(!dataErrorMessage.isEmpty()) {
+            Vector2 textSize = textRenderer.getTextSize(dataErrorMessage, "Maiandra", FontStyle.BOLD, 26);
+            errorBackground.draw(spriteBatch, viewport.getWorldWidth() / 2 - textSize.x / 2 - 20, nextButton.getY() + nextButton.getHeight() + 150 - 72 / 2, textSize.x + 40, 72);
+            textRenderer.drawCenteredText(dataErrorMessage, viewport.getWorldWidth() / 2, nextButton.getY() + nextButton.getHeight() + 150, 26, "Maiandra", FontStyle.BOLD, Color.valueOf("F44336"));
+        }
+
+        if(calculationTarget == CalculationParameter.Type.TARGET_DISTANCE) {
+            nextButton.setVisible(validateDataForDistanceCalculation());
+        } else {
+            nextButton.setVisible(validateDataForTimeCalculation());
+        }
+    }
+
+    private boolean validateDataForTimeCalculation() {
+        if(flyTravelDistanceInput.getText().isEmpty()) {
+            dataErrorMessage = "Nincs megadva a céltávolság!";
+            return false;
+        }
+
+        int targetDistance = Integer.parseInt(flyTravelDistanceInput.getText());
+
+        if(targetDistance == 0) {
+            dataErrorMessage = "Ha a szúnyog 0 km-t akar megtenni, nem kell elindulnia";
+            return false;
+        }
+
+        return validateDataForDistanceCalculation();
+    }
+
+    private boolean validateDataForDistanceCalculation() {
+        if(flySpeedInput.getText().isEmpty()) {
+            dataErrorMessage = "Nincs megadva a szúnyog sebessége!";
+            return false;
+        }
+
+        if(humansDistanceInput.getText().isEmpty()) {
+            dataErrorMessage = "Nincs megadva az emberek távolsága";
+            return false;
+        }
+
+        if(speedHumanA.getText().isEmpty() || speedHumanB.getText().isEmpty()) {
+            dataErrorMessage = "Nincs megadva az emberek sebessége!";
+            return false;
+        }
+
+        if(windCheckBox.isChecked() && windSpeedInput.getText().isEmpty()) {
+            dataErrorMessage = "Nincs megadva a szélsebesség";
+            return false;
+        }
+
+        int flySpeed = Integer.parseInt(flySpeedInput.getText());
+        int windSpeed = (windCheckBox.isChecked() ? Integer.parseInt(windSpeedInput.getText()) : 0) * windDirection;
+
+        if(Math.abs(flySpeed) < Math.abs(windSpeed)) {
+            dataErrorMessage = "A szél el fogja fújni a szúnyogot!";
+            return false;
+        }
+
+        if(Math.abs(flySpeed) == Math.abs(windSpeed)) {
+            dataErrorMessage = "A szél olyan gyors mint a szúnyog, egy helyben fog állni!";
+            return false;
+        }
+
+        dataErrorMessage = "";
+
+        return true;
+    }
+
+    private void calculateTravelDistance() {
+        float humansDistance = Float.parseFloat(humansDistanceInput.getText());
+        int flySpeed = Integer.parseInt(flySpeedInput.getText());
+        int windSpeed = (windCheckBox.isChecked() ? Integer.parseInt(windSpeedInput.getText()) : 0) * windDirection;
+
+        int humanASpeed = Integer.parseInt(speedHumanA.getText());
+        int humanBSpeed = Integer.parseInt(speedHumanB.getText());
+
+        int flyDirection = 1;
+        float humanAX = 0;
+        float humanBX = humansDistance;
+        float flyX = 0;
+
+        float humanAMovement;
+        float humanBMovement;
+        float relativeWindSpeed;
+        float flyMovement;
+
+        float totalDistance = 0;
+        float totalTime = 0;
+
+        float delta = 1 / 1000f;
+
+        while (humansDistance > 0) {
+            humanAMovement = humanASpeed * delta;
+            humanBMovement = -humanBSpeed * delta;
+
+            if(flyX <= humanAX) {
+                flyDirection = 1;
+            }
+
+            if(flyX >= humanBX) {
+                flyDirection = -1;
+            }
+
+            relativeWindSpeed = windSpeed * flyDirection;
+
+            flyMovement = (flySpeed + relativeWindSpeed) * flyDirection * delta;
+
+            humanAX += humanAMovement;
+            humanBX += humanBMovement;
+
+            flyX += flyMovement;
+
+            humansDistance = Math.abs(humanBX) - Math.abs(humanAX);
+
+            totalDistance += Math.abs(flyMovement);
+            totalTime += delta;
+        }
+
+        Trainer.getTrainer().setScreen(new CalculationResultScreen(0f, totalTime, totalDistance));
+    }
+
+    private void calculateStartTime() {
+        float humansDistance = Float.parseFloat(humansDistanceInput.getText());
+        int targetDistance = Integer.parseInt(flyTravelDistanceInput.getText());
+        int flySpeed = Integer.parseInt(flySpeedInput.getText());
+        int windSpeed = (windCheckBox.isChecked() ? Integer.parseInt(windSpeedInput.getText()) : 0) * windDirection;
+
+        int humanASpeed = Integer.parseInt(speedHumanA.getText());
+        int humanBSpeed = Integer.parseInt(speedHumanB.getText());
+
+        int flyDirection = 1;
+        float humanAX = 0;
+        float humanBX = humansDistance;
+        float flyX = 0;
+
+        float humanAMovement;
+        float humanBMovement;
+        float relativeWindSpeed;
+        float flyMovement;
+
+        float totalDistance = 0;
+        float totalTime = 0;
+
+        float delta = 1 / 1000f;
+
+        while (humansDistance > 0) {
+            humanAMovement = humanASpeed * delta;
+            humanBMovement = -humanBSpeed * delta;
+
+            if(flyX <= humanAX) {
+                flyDirection = 1;
+            }
+
+            if(flyX >= humanBX) {
+                flyDirection = -1;
+            }
+
+            relativeWindSpeed = windSpeed * flyDirection;
+
+            flyMovement = (flySpeed + relativeWindSpeed) * flyDirection * delta;
+
+            humanAX += humanAMovement;
+            humanBX += humanBMovement;
+
+            flyX += flyMovement;
+
+            humansDistance = Math.abs(humanBX) - Math.abs(humanAX);
+
+            totalDistance += Math.abs(flyMovement);
+            totalTime += delta;
+        }
+
+        float x = totalTime / totalDistance;
+        float startDistance = totalDistance - targetDistance;
+
+        float startTime = x * startDistance;
+
+        Trainer.getTrainer().setScreen(new CalculationResultScreen(startTime, totalTime - startTime, targetDistance));
     }
 
     @Override

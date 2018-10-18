@@ -80,7 +80,7 @@ public class TextRenderer {
         x -= glyphLayout.width;
 
         if(yBottom) {
-            y += glyphLayout.height;
+            y += size;
         }
 
         font.setColor(color);

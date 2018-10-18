@@ -52,6 +52,8 @@ public class GuiTextInput implements GuiElement, InputHandler {
 
     private final GuiScreen parent;
 
+    @Getter
+    @Setter
     private String text = "";
     private final String placeholder;
 
