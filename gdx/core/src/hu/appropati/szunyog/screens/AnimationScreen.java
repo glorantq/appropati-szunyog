@@ -56,7 +56,7 @@ public class AnimationScreen extends MenuScreen {
         viewport = trainer.getViewport();
 
         TextureManager textureManager = trainer.getTextureManager();
-        humanTexture = textureManager.getTexture("gui/human.png");
+        humanTexture = textureManager.getTexture("gui/human_alt.png");
         flyTexture = textureManager.getTexture("gui/fly.png");
 
         humanAX = viewport.getWorldWidth() / 2 - (humansDistance / 2) * metersToPixels;
@@ -91,7 +91,7 @@ public class AnimationScreen extends MenuScreen {
         }
 
         spriteBatch.draw(humanTexture, humanAX - humanTexture.getWidth(), viewport.getWorldHeight() / 2);
-        spriteBatch.draw(humanTexture, humanBX, viewport.getWorldHeight() / 2);
+        spriteBatch.draw(humanTexture, humanBX, viewport.getWorldHeight() / 2, humanTexture.getWidth(), humanTexture.getHeight(), 0, 0, humanTexture.getWidth(), humanTexture.getHeight(), true, false);
 
         spriteBatch.draw(flyTexture, flyX - flyTexture.getWidth() / 2, viewport.getWorldHeight() / 2 + humanTexture.getHeight() / 2 - flyTexture.getHeight() / 2);
     }
@@ -143,9 +143,6 @@ public class AnimationScreen extends MenuScreen {
     }
 
     private String formatDistance(float distance) {
-        //distance = Math.round(distance * 100) / 100;
-
         return String.format(Locale.getDefault(), "%.2f", distance);
     }
-
 }

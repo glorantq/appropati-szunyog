@@ -1,5 +1,7 @@
 package hu.appropati.szunyog.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -15,7 +17,7 @@ public class MenuScreen extends GuiScreen {
     private Texture backgroundTexture;
     private Vector2 backgroundSize;
 
-    protected Texture logoTexture;
+    private Texture logoTexture;
 
     @Override
     public void show() {
@@ -26,6 +28,11 @@ public class MenuScreen extends GuiScreen {
 
         logoTexture = textureManager.getTexture("gui/logo.png");
         backgroundTexture = textureManager.getTexture("gui/background.jpg");
+
+        Music backgroundMusic = trainer.getAssetManager().get("audio/music.ogg", Music.class);
+        backgroundMusic.setLooping(true);
+        backgroundMusic.setVolume(.5f);
+        backgroundMusic.play();
 
         scaleBackground();
     }
