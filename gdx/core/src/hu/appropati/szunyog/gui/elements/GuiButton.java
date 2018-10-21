@@ -31,7 +31,7 @@ public class GuiButton implements GuiElement, InputHandler {
     private float y;
 
     @Getter
-    private final float width;
+    private float width;
 
     @Getter
     private final float height;

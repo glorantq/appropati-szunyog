@@ -6,10 +6,15 @@
     "gui/logo.png",
     "gui/background.jpg",
     "gui/check.png",
-    "gui/text_input.png"
+    "gui/text_input.png",
+    "gui/clock.png",
+    "gui/human.png",
+    "gui/fly.png"
   ],
 
-  "music": [],
+  "music": [
+    "audio/music.ogg"
+  ],
 
   "sound": []
 }

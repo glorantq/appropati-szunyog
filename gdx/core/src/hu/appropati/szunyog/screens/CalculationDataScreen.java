@@ -129,18 +129,24 @@ public class CalculationDataScreen extends MenuScreen {
 
         nextButton.onClick((longPress) -> {
             boolean isAnimated = animationCheckBox.isChecked();
+            float humansDistance = Float.parseFloat(humansDistanceInput.getText());
+            int flySpeed = Integer.parseInt(flySpeedInput.getText());
+            int windSpeed = (windCheckBox.isChecked() ? Integer.parseInt(windSpeedInput.getText()) : 0) * windDirection;
 
-            if(calculationTarget == CalculationParameter.Type.TARGET_DISTANCE) {
-                if(isAnimated) {
+            int humanASpeed = Integer.parseInt(speedHumanA.getText());
+            int humanBSpeed = Integer.parseInt(speedHumanB.getText());
 
+            if(isAnimated) {
+                if(calculationTarget == CalculationParameter.Type.TARGET_DISTANCE) {
+                    Trainer.getTrainer().setScreen(new AnimationScreen(humanASpeed, humanBSpeed, humansDistance, flySpeed, windSpeed, 0f));
                 } else {
-                    calculateTravelDistance();
+                    Trainer.getTrainer().setScreen(new AnimationScreen(humanASpeed, humanBSpeed, humansDistance, flySpeed, windSpeed, calculateStartTime(false)));
                 }
             } else {
-                if(isAnimated) {
-
+                if(calculationTarget == CalculationParameter.Type.TARGET_DISTANCE) {
+                    calculateTravelDistance();
                 } else {
-                    calculateStartTime();
+                    calculateStartTime(true);
                 }
             }
         });
@@ -272,7 +278,7 @@ public class CalculationDataScreen extends MenuScreen {
         Trainer.getTrainer().setScreen(new CalculationResultScreen(0f, totalTime, totalDistance));
     }
 
-    private void calculateStartTime() {
+    private float calculateStartTime(boolean showResult) {
         float humansDistance = Float.parseFloat(humansDistanceInput.getText());
         int targetDistance = Integer.parseInt(flyTravelDistanceInput.getText());
         int flySpeed = Integer.parseInt(flySpeedInput.getText());
@@ -324,11 +330,15 @@ public class CalculationDataScreen extends MenuScreen {
         }
 
         float x = totalTime / totalDistance;
-        float startDistance = totalDistance - targetDistance;
+        float startDistance = Math.max(0, totalDistance - targetDistance);
 
         float startTime = x * startDistance;
 
-        Trainer.getTrainer().setScreen(new CalculationResultScreen(startTime, totalTime - startTime, targetDistance));
+        if(showResult) {
+            Trainer.getTrainer().setScreen(new CalculationResultScreen(startTime, totalTime - startTime, targetDistance));
+        }
+
+        return startTime;
     }
 
     @Override
