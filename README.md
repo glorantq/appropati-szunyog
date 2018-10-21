@@ -28,6 +28,6 @@ bemenetek bekérésére, mint például szél sebessége, irány stb.
 ## Bónusz Feladatok
 - [x] Távolság kiszámítása széllel együtt
 - [x] Indulási idő egy adott távolságra széllel együtt
-- [ ] Röppálya animálása
+- [x] Röppálya animálása
 - [ ] Zene
 - [ ] Running in the 90s easter egg
