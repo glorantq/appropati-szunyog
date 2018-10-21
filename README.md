@@ -29,5 +29,5 @@ bemenetek bekérésére, mint például szél sebessége, irány stb.
 - [x] Távolság kiszámítása széllel együtt
 - [x] Indulási idő egy adott távolságra széllel együtt
 - [x] Röppálya animálása
-- [ ] Zene
+- [x] Zene
 - [ ] Running in the 90s easter egg
