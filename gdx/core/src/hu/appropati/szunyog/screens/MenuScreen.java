@@ -1,6 +1,5 @@
 package hu.appropati.szunyog.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,7 +16,7 @@ public class MenuScreen extends GuiScreen {
     private Texture backgroundTexture;
     private Vector2 backgroundSize;
 
-    private Texture logoTexture;
+    Texture logoTexture;
 
     @Override
     public void show() {
@@ -29,10 +28,11 @@ public class MenuScreen extends GuiScreen {
         logoTexture = textureManager.getTexture("gui/logo.png");
         backgroundTexture = textureManager.getTexture("gui/background.jpg");
 
-        Music backgroundMusic = trainer.getAssetManager().get("audio/music.ogg", Music.class);
-        backgroundMusic.setLooping(true);
-        backgroundMusic.setVolume(.5f);
-        backgroundMusic.play();
+        trainer.setBackgroundMusic(trainer.getAssetManager().get("audio/music.ogg", Music.class));
+
+        if(trainer.getPreferences().getBoolean("audio")) {
+            trainer.playBackgroundMusic();
+        }
 
         scaleBackground();
     }
@@ -43,13 +43,13 @@ public class MenuScreen extends GuiScreen {
         drawLogo(spriteBatch);
     }
 
-    protected void drawBackground(SpriteBatch spriteBatch) {
+    void drawBackground(SpriteBatch spriteBatch) {
         spriteBatch.setColor(.7f, .7f, .7f, 1f);
         spriteBatch.draw(backgroundTexture, viewport.getWorldWidth() / 2 - backgroundSize.x / 2, viewport.getWorldHeight() / 2 - backgroundSize.y / 2, backgroundSize.x, backgroundSize.y);
         spriteBatch.setColor(1f, 1f, 1f, 1f);
     }
 
-    protected void drawLogo(SpriteBatch spriteBatch) {
+    private void drawLogo(SpriteBatch spriteBatch) {
         spriteBatch.draw(logoTexture, viewport.getWorldWidth() / 2 - logoTexture.getWidth() / 2, viewport.getWorldHeight() - logoTexture.getHeight() - 5);
     }
 

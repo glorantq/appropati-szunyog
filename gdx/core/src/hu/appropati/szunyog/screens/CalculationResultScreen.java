@@ -26,7 +26,7 @@ public class CalculationResultScreen extends MenuScreen {
     private final float tripTime;
     private final float totalDistance;
 
-    public CalculationResultScreen(float startTime, float tripTime, float totalDistance) {
+    CalculationResultScreen(float startTime, float tripTime, float totalDistance) {
         this.startTime = startTime;
         this.tripTime = tripTime;
         this.totalDistance = totalDistance;

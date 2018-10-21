@@ -11,7 +11,7 @@ import lombok.Getter;
 
 @Getter
 public class Font {
-    private static final String CHARSET = "0123456789qwertzuiopőúasdfghjkléáűíyxcvbnmQWERTZUIOPŐÚASDFGHJKLÉÁŰÍYXCVBNM,.-?:_;>*\\|$ß@&#><{}'\"+!%/=()©";
+    private static final String CHARSET = "0123456789qwertzuiopőúasdfghjkléáűíyxcvbnmöüóÖÜÓQWERTZUIOPŐÚASDFGHJKLÉÁŰÍYXCVBNM,.-?:_;>*\\|$ß@&#><{}'\"+!%/=()©";
 
     private final String name;
 

@@ -21,14 +21,6 @@ public class TextureManager {
         return INSTANCE;
     }
 
-    public static TextureManager get() {
-        if(INSTANCE == null) {
-            throw new UnsupportedOperationException("Not initialised!");
-        }
-
-        return INSTANCE;
-    }
-
     private final AssetManager assetManager;
     private final Logger logger;
 

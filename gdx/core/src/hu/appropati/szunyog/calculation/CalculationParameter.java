@@ -10,7 +10,4 @@ public class CalculationParameter {
         FLY_SPEED, START_TIME,
         WIND_SPEED
     }
-
-    private final Type type;
-    private final float value;
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -28,6 +29,7 @@ import hu.appropati.szunyog.screens.AssetLoaderScreen;
 import hu.appropati.szunyog.screens.CrashScreen;
 import hu.appropati.szunyog.screens.MainScreen;
 import lombok.Getter;
+import lombok.Setter;
 
 public class Trainer extends Game {
     public static int WIDTH = 720;
@@ -77,9 +79,31 @@ public class Trainer extends Game {
     @Getter
     private final TextInputProvider textInputProvider;
 
+    @Getter
+    private Preferences preferences;
+
+    @Setter
+    private Music backgroundMusic;
+
     @Override
     public void create() {
         logger.info("Starting up!");
+
+        preferences = Gdx.app.getPreferences("AppropatiSzunyogfitnesz");
+
+        if(!preferences.contains("easter_egg")) {
+            preferences.putBoolean("easter_egg", false);
+        }
+
+        if(!preferences.contains("audio")) {
+            preferences.putBoolean("audio", true);
+        }
+
+        if(!preferences.contains("precision")) {
+            preferences.putInteger("precision", 1000);
+        }
+
+        preferences.flush();
 
         spriteBatch = new SpriteBatch();
         viewport = new ExtendViewport(WIDTH, HEIGHT);
@@ -194,6 +218,20 @@ public class Trainer extends Game {
             logger.debug("Changing to: {}", currentScreen.getClass().getCanonicalName());
         } else {
             logger.debug("Removed current screen!");
+        }
+    }
+
+    public void playBackgroundMusic() {
+        if(backgroundMusic != null) {
+            backgroundMusic.setVolume(.5f);
+            backgroundMusic.setLooping(true);
+            backgroundMusic.play();
+        }
+    }
+
+    public void stopBackgroundMusic() {
+        if(backgroundMusic != null && backgroundMusic.isPlaying()) {
+            backgroundMusic.stop();
         }
     }
 

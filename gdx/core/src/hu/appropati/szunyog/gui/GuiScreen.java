@@ -14,7 +14,6 @@ import hu.appropati.szunyog.Trainer;
 
 public abstract class GuiScreen implements Screen {
     public List<GuiElement> guiElements = new ArrayList<>();
-    private List<GuiElement> hiddenElements = new CopyOnWriteArrayList<>();
 
     @Override
     public void render(float delta) {
@@ -46,12 +45,6 @@ public abstract class GuiScreen implements Screen {
     }
 
     protected abstract void draw(SpriteBatch spriteBatch);
-
-    protected Vector2 getMousePosWorld() {
-        Vector3 mouse = Trainer.getTrainer().getViewport().unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-
-        return new Vector2(mouse.x, mouse.y);
-    }
 
     @Override
     public void dispose() {

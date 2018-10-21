@@ -39,7 +39,7 @@ public class AnimationScreen extends MenuScreen {
     private Texture humanTexture;
     private Texture flyTexture;
 
-    public AnimationScreen(float humanASpeed, float humanBSpeed, float humansDistance, float flySpeed, float windSpeed, float startTime) {
+    AnimationScreen(float humanASpeed, float humanBSpeed, float humansDistance, float flySpeed, float windSpeed, float startTime) {
         this.humanASpeed = humanASpeed;
         this.humanBSpeed = humanBSpeed;
         this.humansDistance = humansDistance;
@@ -85,6 +85,7 @@ public class AnimationScreen extends MenuScreen {
         textRenderer.drawRightText(formatDistance(totalDistance) + " m", viewport.getWorldWidth() - 5, textBaseY, 60, "Niramit", FontStyle.NORMAL, Color.WHITE, true);
         textRenderer.drawRightText(formatTime(Math.max(0, totalTripTime - startTime)), viewport.getWorldWidth() - 5, textBaseY + 65, 60, "Niramit", FontStyle.NORMAL, Color.WHITE, true);
         textRenderer.drawRightText(formatTime(startTime), viewport.getWorldWidth() - 5, textBaseY + 130, 60, "Niramit", FontStyle.NORMAL, Color.WHITE, true);
+        textRenderer.drawCenteredText("(Az itt mért értékek pontatlanak lehetnek eszközöd miatt)", viewport.getWorldWidth() / 2, textBaseY + 210, 26, "Niramit", FontStyle.NORMAL, Color.GRAY);
 
         if(humansDistance > 0) {
             update(Gdx.graphics.getDeltaTime());

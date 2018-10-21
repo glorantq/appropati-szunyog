@@ -38,6 +38,8 @@ public class GuiButton implements GuiElement, InputHandler {
 
     @Setter
     private String text;
+
+    @Setter
     private Texture icon = null;
 
     private final Style style;
@@ -87,6 +89,10 @@ public class GuiButton implements GuiElement, InputHandler {
         normalTexture = new NinePatch(textureManager.getTexture("gui/button_normal.png"), 40, 40, 40, 40);
         hoverTexture = new NinePatch(textureManager.getTexture("gui/button_hover.png"), 40, 40, 40, 40);
 
+        updateIcon();
+    }
+
+    public void updateIcon() {
         if(icon != null) {
             float scale;
             imageSize = new Vector2();

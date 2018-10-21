@@ -45,7 +45,7 @@ public class MainScreen extends MenuScreen {
 
         timeButton.onClick((longPress) -> trainer.setScreen(new CalculationDataScreen(CalculationParameter.Type.START_TIME)));
         distanceButton.onClick((longPress) -> trainer.setScreen(new CalculationDataScreen(CalculationParameter.Type.TARGET_DISTANCE)));
-        settingsButton.onClick((longPress) -> trainer.setScreen(new PlanScreen()));
+        settingsButton.onClick((longPress) -> trainer.setScreen(new SettingsScreen()));
 
         super.show();
     }
