@@ -22,12 +22,12 @@ bemenetek bekérésére, mint például szél sebessége, irány stb.
 ```
 
 ## Feladatok
-- [ ] Távolság kiszámítása
-- [ ] Indulási idő egy adott távolságra
+- [x] Távolság kiszámítása
+- [x] Indulási idő egy adott távolságra
 
 ## Bónusz Feladatok
-- [ ] Távolság kiszámítása széllel együtt
-- [ ] Indulási idő egy adott távolságra széllel együtt
+- [x] Távolság kiszámítása széllel együtt
+- [x] Indulási idő egy adott távolságra széllel együtt
 - [ ] Röppálya animálása
 - [ ] Zene
 - [ ] Running in the 90s easter egg
