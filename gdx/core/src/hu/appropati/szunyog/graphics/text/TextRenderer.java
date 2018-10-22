@@ -87,6 +87,16 @@ public class TextRenderer {
         font.draw(spriteBatch, text, x, y);
     }
 
+    public void drawWrappedText(String text, float x, float y, int size, String fontName, FontStyle fontStyle, Color color, float width, int align) {
+        BitmapFont font = fontCache.get(new CacheLookup(fontName, fontStyle, size));
+        if(font == null) {
+            return;
+        }
+
+        font.setColor(color);
+        font.draw(spriteBatch, text, x, y, width, align, true);
+    }
+
     public Vector2 getTextSize(String text, String fontName, FontStyle fontStyle, int size) {
         if(text.isEmpty()) {
             return Vector2.Zero;

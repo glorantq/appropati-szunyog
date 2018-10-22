@@ -107,6 +107,7 @@ public class CalculationDataScreen extends MenuScreen {
 
         GuiButton backButton = new GuiButton(5, 5, 130, 75, "Vissza", GuiButton.Style.builder().build());
         backButton.onClick((longPress) -> trainer.setScreen(new MainScreen()));
+        backButton.setCatchBackKey(true);
 
         createElement(backButton);
 
@@ -355,7 +356,7 @@ public class CalculationDataScreen extends MenuScreen {
         float startTime = x * startDistance;
 
         if (showResult) {
-            Trainer.getTrainer().setScreen(new CalculationResultScreen(startTime, totalTime - startTime, targetDistance));
+            Trainer.getTrainer().setScreen(new CalculationResultScreen(startTime, totalTime - startTime, Math.min(targetDistance, totalDistance)));
         }
 
         return startTime;

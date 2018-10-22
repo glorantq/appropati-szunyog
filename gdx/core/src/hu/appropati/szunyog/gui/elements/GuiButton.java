@@ -1,5 +1,7 @@
 package hu.appropati.szunyog.gui.elements;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -54,9 +56,11 @@ public class GuiButton implements GuiElement, InputHandler {
     private Consumer<Boolean> onClick;
     private boolean touching = false;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     private boolean visible = true;
+
+    @Getter @Setter
+    private boolean catchBackKey = false;
 
     public GuiButton(float x, float y, float width, float height, String text, Style style) {
         this.x = x;
@@ -92,7 +96,7 @@ public class GuiButton implements GuiElement, InputHandler {
         updateIcon();
     }
 
-    public void updateIcon() {
+    private void updateIcon() {
         if(icon != null) {
             float scale;
             imageSize = new Vector2();
@@ -141,6 +145,10 @@ public class GuiButton implements GuiElement, InputHandler {
             }
 
             spriteBatch.draw(icon, iconPosition.x, iconPosition.y, imageSize.x, imageSize.y);
+        }
+
+        if(catchBackKey && Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            onClick.accept(false);
         }
     }
 

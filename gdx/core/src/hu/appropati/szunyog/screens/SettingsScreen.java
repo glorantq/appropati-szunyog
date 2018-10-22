@@ -31,9 +31,13 @@ public class SettingsScreen extends MenuScreen {
 
         GuiButton menuButton = new GuiButton(viewport.getWorldWidth() - 130, 5, 130, 75, "Vissza", GuiButton.Style.builder().build());
         menuButton.onClick((longPress) -> trainer.setScreen(new MainScreen()));
+        menuButton.setCatchBackKey(true);
 
         audioCheckBox = new GuiCheckBox(viewport.getWorldWidth() - 45 - 72, viewport.getWorldHeight() - logoTexture.getHeight() - 187, 72, 72, "", GuiButton.Style.builder().build());
         precisionButton = new GuiButton(viewport.getWorldWidth() - 45 - 130, audioCheckBox.getY() - 72 - 15, 130, 72, "Nagy", GuiButton.Style.builder().build());
+
+        GuiButton creditsButton = new GuiButton(viewport.getWorldWidth() / 2 - 125, precisionButton.getY() - 95, 250, 80, "Készítők", GuiButton.Style.builder().build());
+        creditsButton.onClick((longPress) -> trainer.setScreen(new CreditsScreen()));
 
         audioCheckBox.setChecked(preferences.getBoolean("audio"));
 
@@ -73,6 +77,7 @@ public class SettingsScreen extends MenuScreen {
         createElement(menuButton);
         createElement(audioCheckBox);
         createElement(precisionButton);
+        createElement(creditsButton);
     }
 
     @Override

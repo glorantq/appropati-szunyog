@@ -51,6 +51,7 @@ public class CalculationResultScreen extends MenuScreen {
 
         GuiButton menuButton = new GuiButton(viewport.getWorldWidth() - 135, 5, 130, 75, "Vissza", GuiButton.Style.builder().build());
         menuButton.onClick((longPress) -> trainer.setScreen(new MainScreen()));
+        menuButton.setCatchBackKey(true);
 
         createElement(menuButton);
     }

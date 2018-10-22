@@ -1,5 +1,5 @@
 android {
-    buildToolsVersion '28.0.2'
+    buildToolsVersion '28.0.3'
     compileSdkVersion 28
     sourceSets {
         main {
@@ -110,6 +110,10 @@ idea {
     }
 }
 
-dependencies {
+repositories {
+    jcenter()
+}
 
+dependencies {
+    compile "org.jetbrains.trove4j:trove4j:20160824"
 }

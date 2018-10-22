@@ -56,7 +56,7 @@ public class AnimationScreen extends MenuScreen {
         viewport = trainer.getViewport();
 
         TextureManager textureManager = trainer.getTextureManager();
-        humanTexture = textureManager.getTexture("gui/human_alt.png");
+        humanTexture = textureManager.getTexture("gui/human.png");
         flyTexture = textureManager.getTexture("gui/fly.png");
 
         humanAX = viewport.getWorldWidth() / 2 - (humansDistance / 2) * metersToPixels;
@@ -66,6 +66,7 @@ public class AnimationScreen extends MenuScreen {
 
         GuiButton menuButton = new GuiButton(viewport.getWorldWidth() - 135, 5, 130, 75, "Vissza", GuiButton.Style.builder().build());
         menuButton.onClick((longPress) -> trainer.setScreen(new MainScreen()));
+        menuButton.setCatchBackKey(true);
 
         createElement(menuButton);
     }

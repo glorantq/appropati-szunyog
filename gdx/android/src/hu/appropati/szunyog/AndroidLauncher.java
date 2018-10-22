@@ -2,6 +2,7 @@ package hu.appropati.szunyog;
 
 import android.app.Activity;
 import android.graphics.Rect;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -19,6 +20,8 @@ import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.badlogic.gdx.backends.android.surfaceview.GLSurfaceView20;
+import com.badlogic.gdx.backends.android.surfaceview.GLSurfaceView20API18;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -66,6 +69,12 @@ public class AndroidLauncher extends AndroidApplication implements TextInputProv
         config.useRotationVectorSensor = false;
 
         View gameView = initializeForView(Trainer.createTrainer(this), config);
+
+        if(gameView instanceof GLSurfaceView) {
+            ((GLSurfaceView) gameView).setPreserveEGLContextOnPause(true);
+        } else {
+            ((GLSurfaceView20API18) gameView).setPreserveEGLContextOnPause(true);
+        }
 
         inputLayout = new LinearLayout(this);
 

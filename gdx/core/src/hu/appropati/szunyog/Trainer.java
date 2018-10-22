@@ -118,6 +118,7 @@ public class Trainer extends Game {
 
         inputHandler = new GdxInputHandler();
         Gdx.input.setInputProcessor(new InputMultiplexer(new GestureDetector(inputHandler), inputHandler));
+        Gdx.input.setCatchBackKey(true);
 
         try {
             logger.info("Starting asset loading!");
