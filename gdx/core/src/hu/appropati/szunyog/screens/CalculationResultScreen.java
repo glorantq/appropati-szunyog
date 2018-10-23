@@ -20,7 +20,6 @@ public class CalculationResultScreen extends MenuScreen {
     private TextureManager textureManager;
 
     private Texture clockTexture;
-    private float clockSize;
 
     private final float startTime;
     private final float tripTime;
@@ -43,12 +42,6 @@ public class CalculationResultScreen extends MenuScreen {
         viewport = trainer.getViewport();
         textRenderer = trainer.getTextRenderer();
 
-        if (viewport.getWorldWidth() < viewport.getWorldHeight()) {
-            clockSize = viewport.getWorldWidth() / 2 + 50;
-        } else {
-            clockSize = viewport.getWorldHeight() / 2 + 50;
-        }
-
         GuiButton menuButton = new GuiButton(viewport.getWorldWidth() - 135, 5, 130, 75, "Vissza", GuiButton.Style.builder().build());
         menuButton.onClick((longPress) -> trainer.setScreen(new MainScreen()));
         menuButton.setCatchBackKey(true);
@@ -61,6 +54,7 @@ public class CalculationResultScreen extends MenuScreen {
         drawBackground(spriteBatch);
         drawElements(spriteBatch);
 
+        float clockSize = 256;
         spriteBatch.draw(clockTexture, viewport.getWorldWidth() / 2 - clockSize / 2, viewport.getWorldHeight() - clockSize - 60, clockSize, clockSize);
 
         textRenderer.drawText("Útidő:", 10, viewport.getWorldHeight() / 2 - 72 / 2, 72, "Niramit", FontStyle.BOLD, Color.WHITE, true);
@@ -78,8 +72,8 @@ public class CalculationResultScreen extends MenuScreen {
     private String formatTime(float seconds) {
         int secondsInt = Math.round(seconds);
 
-        int minutes = (int) (seconds - (secondsInt % 60)) / 60;
-        seconds = seconds - minutes * 60;
+        int minutes = (secondsInt - (secondsInt % 60)) / 60;
+        seconds = secondsInt - minutes * 60;
 
         return String.format(Locale.getDefault(), "%02d:%02d", minutes, (int) seconds);
     }

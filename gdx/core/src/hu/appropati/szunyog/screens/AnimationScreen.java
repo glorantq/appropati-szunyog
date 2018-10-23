@@ -138,8 +138,8 @@ public class AnimationScreen extends MenuScreen {
     private String formatTime(float seconds) {
         int secondsInt = Math.round(seconds);
 
-        int minutes = (int) (seconds - (secondsInt % 60)) / 60;
-        seconds = seconds - minutes * 60;
+        int minutes = (secondsInt - (secondsInt % 60)) / 60;
+        seconds = secondsInt - minutes * 60;
 
         return String.format(Locale.getDefault(), "%02d:%02d", minutes, (int) seconds);
     }

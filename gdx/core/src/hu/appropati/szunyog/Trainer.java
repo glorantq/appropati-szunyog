@@ -1,6 +1,5 @@
 package hu.appropati.szunyog;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -145,8 +144,12 @@ public class Trainer extends Game {
             openCrashScreen(e);
         }
 
-        if(Gdx.app.getType() == Application.ApplicationType.Desktop) {
-            Gdx.graphics.setTitle("Appropati Szunyogfitnesz -- " + Gdx.graphics.getFramesPerSecond() + " FPS");
+        if(Gdx.input.isKeyJustPressed(Input.Keys.F11)) {
+            if(Gdx.graphics.isFullscreen()) {
+                Gdx.graphics.setWindowedMode((int) (WIDTH / 1.3f), (int) (HEIGHT / 1.3f));
+            } else {
+                Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            }
         }
     }
 

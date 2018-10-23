@@ -34,7 +34,7 @@ public class CalculationDataScreen extends MenuScreen {
     private GuiButton nextButton;
 
     private int windDirection = 1;
-    private int precicion;
+    private int precision;
 
     private String dataErrorMessage = "";
 
@@ -153,7 +153,7 @@ public class CalculationDataScreen extends MenuScreen {
             }
         });
 
-        precicion = trainer.getPreferences().getInteger("precision");
+        precision = trainer.getPreferences().getInteger("precision");
     }
 
     @Override
@@ -164,7 +164,7 @@ public class CalculationDataScreen extends MenuScreen {
         if (!dataErrorMessage.isEmpty()) {
             Vector2 textSize = textRenderer.getTextSize(dataErrorMessage, "Maiandra", FontStyle.BOLD, 26);
             errorBackground.draw(spriteBatch, viewport.getWorldWidth() / 2 - textSize.x / 2 - 20, nextButton.getY() + nextButton.getHeight() + 150 - 72 / 2, textSize.x + 40, 72);
-            textRenderer.drawCenteredText(dataErrorMessage, viewport.getWorldWidth() / 2, nextButton.getY() + nextButton.getHeight() + 150, 26, "Maiandra", FontStyle.BOLD, Color.valueOf("F44336"));
+            textRenderer.drawCenteredText(dataErrorMessage, viewport.getWorldWidth() / 2, nextButton.getY() + nextButton.getHeight() + 150, 26, "Maiandra", FontStyle.BOLD, Color.valueOf("DD1111"));
         }
 
         if (calculationTarget == CalculationParameter.Type.TARGET_DISTANCE) {
@@ -267,7 +267,7 @@ public class CalculationDataScreen extends MenuScreen {
         float totalDistance = 0;
         float totalTime = 0;
 
-        float delta = 1 / (float) precicion;
+        float delta = 1 / (float) precision;
 
         while (humansDistance > 0) {
             humanAMovement = humanASpeed * delta;
@@ -321,7 +321,7 @@ public class CalculationDataScreen extends MenuScreen {
         float totalDistance = 0;
         float totalTime = 0;
 
-        float delta = 1 / (float) precicion;
+        float delta = 1 / (float) precision;
 
         while (humansDistance > 0) {
             humanAMovement = humanASpeed * delta;
