@@ -48,6 +48,7 @@ public class AssetLoaderScreen extends GuiScreen {
     @Override
     protected void draw(SpriteBatch spriteBatch) {
         if(assetManager.update()) {
+            trainer.getCreditsScreen().init();
             trainer.setScreen(nextScreen);
             return;
         }

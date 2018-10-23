@@ -27,6 +27,7 @@ import hu.appropati.szunyog.input.text.TextInputProvider;
 import hu.appropati.szunyog.platform.Platform;
 import hu.appropati.szunyog.screens.AssetLoaderScreen;
 import hu.appropati.szunyog.screens.CrashScreen;
+import hu.appropati.szunyog.screens.CreditsScreen;
 import hu.appropati.szunyog.screens.MainScreen;
 import lombok.Getter;
 import lombok.Setter;
@@ -86,6 +87,9 @@ public class Trainer extends Game {
     @Getter
     private Platform platform;
 
+    @Getter
+    private CreditsScreen creditsScreen;
+
     @Setter
     private Music backgroundMusic;
 
@@ -123,6 +127,8 @@ public class Trainer extends Game {
         inputHandler = new GdxInputHandler();
         Gdx.input.setInputProcessor(new InputMultiplexer(new GestureDetector(inputHandler), inputHandler));
         Gdx.input.setCatchBackKey(true);
+
+        creditsScreen = new CreditsScreen();
 
         try {
             logger.info("Starting asset loading!");

@@ -37,6 +37,7 @@ public class CreditsScreen extends GuiScreen {
     private List<EasterEggHolder> easterEggData = new ArrayList<>();
 
     private float headerY = 0;
+    private float emailMessageY = 0;
 
     @Override
     public void show() {
@@ -50,36 +51,54 @@ public class CreditsScreen extends GuiScreen {
 
         scaleBackground();
 
+        headerY = 0;
+
+        float currentY = 0;
+        for(Paragraph paragraph : data) {
+            paragraph.setY(currentY);
+
+            currentY -= paragraph.getTotalHeight() + 100;
+
+            if(paragraph.twitterButton != null) {
+                createElement(paragraph.twitterButton);
+            }
+
+            if(paragraph.instagramButton != null) {
+                createElement(paragraph.instagramButton);
+            }
+        }
+
+        float easterEggY = -4500;
+        for(int i = 0; i < easterEggData.size(); i++) {
+            EasterEggHolder holder = easterEggData.get(i);
+            holder.y = easterEggY;
+            easterEggY -= holder.textureSize.y + 50;
+        }
+
+        emailMessageY = easterEggY - 25;
+    }
+
+    void init() {
+        Trainer trainer = Trainer.getTrainer();
+        TextureManager textureManager = trainer.getTextureManager();
+
         FileHandle creditsFile = Gdx.files.internal("credits.json");
 
         if(creditsFile.exists()) {
             Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
             List<Paragraph> tempData = gson.fromJson(creditsFile.readString(), new TypeToken<List<Paragraph>>(){}.getType());
 
-            float currentY = 0;
             for(int i = 0; i < tempData.size(); i++) {
                 Paragraph paragraph = tempData.get(i);
-                paragraph.y = currentY;
                 paragraph.init();
-                currentY -= paragraph.getTotalHeight() + 100;
-
-                if(paragraph.twitterButton != null) {
-                    createElement(paragraph.twitterButton);
-                }
-
-                if(paragraph.instagramButton != null) {
-                    createElement(paragraph.instagramButton);
-                }
 
                 data.add(paragraph);
             }
         }
 
-        float easterEggY = -4500;
         for(int i = 0; i < 4; i++) {
             Texture texture = textureManager.getTexture("credits/easteregg/" + i + ".jpg");
-            EasterEggHolder holder = new EasterEggHolder(texture, easterEggY);
-            easterEggY -= holder.textureSize.y + 50;
+            EasterEggHolder holder = new EasterEggHolder(texture, 0);
             easterEggData.add(holder);
         }
     }
@@ -93,6 +112,7 @@ public class CreditsScreen extends GuiScreen {
         float movement = 50 * Gdx.graphics.getDeltaTime();
 
         headerY += movement;
+        emailMessageY += movement;
 
         textRenderer.drawCenteredText("Appropati Szúnyogfitnesz", viewport.getWorldWidth() / 2, headerY + 50, 46, "Maiandra", FontStyle.BOLD, Color.WHITE);
 
@@ -104,7 +124,9 @@ public class CreditsScreen extends GuiScreen {
         easterEggData.forEach((it) -> it.adjustY(movement));
         easterEggData.forEach((it) -> it.draw(spriteBatch));
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+        textRenderer.drawWrappedText("Ha ezt látod, dobj nekünk egy e-mailt!\nappropatistudios@skacce.rs", 20, emailMessageY, 36, "Maiandra", FontStyle.NORMAL, Color.WHITE, viewport.getWorldWidth() - 40, Align.center);
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK) || Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             Trainer.getTrainer().setScreen(new SettingsScreen());
         }
     }
@@ -182,6 +204,19 @@ public class CreditsScreen extends GuiScreen {
             }
         }
 
+        private void setY(float y) {
+            this.y = y;
+            float buttonY = y - 110 - textSize.y;
+
+            if(twitterButton != null) {
+                twitterButton.setY(buttonY);
+            }
+
+            if(instagramButton != null) {
+                instagramButton.setY(buttonY);
+            }
+        }
+
         private void adjustY(float y) {
             this.y += y;
 
@@ -198,7 +233,7 @@ public class CreditsScreen extends GuiScreen {
             TextRenderer textRenderer = Trainer.getTrainer().getTextRenderer();
             Viewport viewport = Trainer.getTrainer().getViewport();
 
-            textRenderer.drawWrappedText(text, 20, y, 26, "Niramit", FontStyle.NORMAL, Color.WHITE, viewport.getWorldWidth() - 20, Align.center);
+            textRenderer.drawWrappedText(text, 20, y, 26, "Niramit", FontStyle.NORMAL, Color.WHITE, viewport.getWorldWidth() - 40, Align.center);
         }
 
         private float getTotalHeight() {

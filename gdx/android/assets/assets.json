@@ -9,7 +9,14 @@
     "gui/text_input.png",
     "gui/clock.png",
     "gui/human.png",
-    "gui/fly.png"
+    "gui/fly.png",
+
+    "credits/twitter.png",
+    "credits/instagram.png",
+    "credits/easteregg/0.jpg",
+    "credits/easteregg/1.jpg",
+    "credits/easteregg/2.jpg",
+    "credits/easteregg/3.jpg"
   ],
 
   "music": [

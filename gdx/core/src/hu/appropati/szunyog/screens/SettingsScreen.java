@@ -37,7 +37,7 @@ public class SettingsScreen extends MenuScreen {
         precisionButton = new GuiButton(viewport.getWorldWidth() - 45 - 130, audioCheckBox.getY() - 72 - 15, 130, 72, "Nagy", GuiButton.Style.builder().build());
 
         GuiButton creditsButton = new GuiButton(viewport.getWorldWidth() / 2 - 125, precisionButton.getY() - 95, 250, 80, "Készítők", GuiButton.Style.builder().build());
-        creditsButton.onClick((longPress) -> trainer.setScreen(new CreditsScreen()));
+        creditsButton.onClick((longPress) -> trainer.setScreen(trainer.getCreditsScreen()));
 
         audioCheckBox.setChecked(preferences.getBoolean("audio"));
 
