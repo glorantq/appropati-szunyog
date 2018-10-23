@@ -24,6 +24,7 @@ import hu.appropati.szunyog.graphics.text.Font;
 import hu.appropati.szunyog.graphics.text.TextRenderer;
 import hu.appropati.szunyog.input.GdxInputHandler;
 import hu.appropati.szunyog.input.text.TextInputProvider;
+import hu.appropati.szunyog.platform.Platform;
 import hu.appropati.szunyog.screens.AssetLoaderScreen;
 import hu.appropati.szunyog.screens.CrashScreen;
 import hu.appropati.szunyog.screens.MainScreen;
@@ -40,16 +41,17 @@ public class Trainer extends Game {
         return INSTANCE;
     }
 
-    public static Trainer createTrainer(TextInputProvider textInputProvider) {
+    public static Trainer createTrainer(TextInputProvider textInputProvider, Platform platform) {
         if (INSTANCE == null) {
-            INSTANCE = new Trainer(textInputProvider);
+            INSTANCE = new Trainer(textInputProvider, platform);
         }
 
         return INSTANCE;
     }
 
-    private Trainer(TextInputProvider provider) {
+    private Trainer(TextInputProvider provider, Platform platform) {
         this.textInputProvider = provider;
+        this.platform = platform;
     }
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -80,6 +82,9 @@ public class Trainer extends Game {
 
     @Getter
     private Preferences preferences;
+
+    @Getter
+    private Platform platform;
 
     @Setter
     private Music backgroundMusic;

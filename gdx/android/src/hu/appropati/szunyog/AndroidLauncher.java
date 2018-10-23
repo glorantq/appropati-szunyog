@@ -2,8 +2,10 @@ package hu.appropati.szunyog;
 
 import android.app.Activity;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.support.customtabs.CustomTabsIntent;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -28,8 +30,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import hu.appropati.szunyog.input.text.TextInputListener;
 import hu.appropati.szunyog.input.text.TextInputProvider;
+import hu.appropati.szunyog.platform.Platform;
 
-public class AndroidLauncher extends AndroidApplication implements TextInputProvider {
+public class AndroidLauncher extends AndroidApplication implements TextInputProvider, Platform {
     private LinearLayout inputLayout;
     private EditText textInput;
     private List<TextInputListener> textInputListeners = new CopyOnWriteArrayList<>();
@@ -68,7 +71,7 @@ public class AndroidLauncher extends AndroidApplication implements TextInputProv
         config.useGyroscope = false;
         config.useRotationVectorSensor = false;
 
-        View gameView = initializeForView(Trainer.createTrainer(this), config);
+        View gameView = initializeForView(Trainer.createTrainer(this, this), config);
 
         if(gameView instanceof GLSurfaceView) {
             ((GLSurfaceView) gameView).setPreserveEGLContextOnPause(true);
@@ -193,5 +196,13 @@ public class AndroidLauncher extends AndroidApplication implements TextInputProv
 
     private void broadcastTextChange() {
         textInputListeners.forEach((it) -> it.textUpdated(textInput.getText().toString()));
+    }
+
+    @Override
+    public void openURL(String url) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+
+        customTabsIntent.launchUrl(this, Uri.parse(url));
     }
 }

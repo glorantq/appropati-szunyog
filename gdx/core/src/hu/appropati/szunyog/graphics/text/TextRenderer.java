@@ -112,6 +112,21 @@ public class TextRenderer {
         return new Vector2(glyphLayout.width, glyphLayout.height);
     }
 
+    public Vector2 getWrappedTextSize(String text, String fontName, FontStyle fontStyle, int size, float width, int align) {
+        if(text.isEmpty()) {
+            return Vector2.Zero;
+        }
+
+        BitmapFont font = fontCache.get(new CacheLookup(fontName, fontStyle, size));
+        if(font == null) {
+            return Vector2.Zero;
+        }
+
+        glyphLayout.setText(font, text, Color.WHITE, width, align, true);
+
+        return new Vector2(glyphLayout.width, glyphLayout.height);
+    }
+
     @Data
     private class CacheLookup {
         private final String name;

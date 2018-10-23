@@ -5,14 +5,18 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import hu.appropati.szunyog.Trainer;
 import hu.appropati.szunyog.input.text.TextInputListener;
 import hu.appropati.szunyog.input.text.TextInputProvider;
+import hu.appropati.szunyog.platform.Platform;
 
-public class DesktopLauncher implements TextInputProvider {
+public class DesktopLauncher implements TextInputProvider, Platform {
     private List<TextInputListener> textInputListeners = new CopyOnWriteArrayList<>();
 
 	public static void main (String[] arg) {
@@ -25,7 +29,8 @@ public class DesktopLauncher implements TextInputProvider {
 		config.resizable = true;
 		config.vSyncEnabled = true;
 
-		new LwjglApplication(Trainer.createTrainer(new DesktopLauncher()), config);
+		DesktopLauncher launcher = new DesktopLauncher();
+		new LwjglApplication(Trainer.createTrainer(launcher, launcher), config);
 	}
 
     @Override
@@ -56,5 +61,14 @@ public class DesktopLauncher implements TextInputProvider {
     @Override
     public void closeTextInput() {
 
+    }
+
+    @Override
+    public void openURL(String url) {
+        try {
+            Desktop.getDesktop().browse(URI.create(url));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

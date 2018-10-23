@@ -1,7 +1,7 @@
 package hu.appropati.szunyog.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,23 +9,34 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.Expose;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import hu.appropati.szunyog.Trainer;
 import hu.appropati.szunyog.graphics.TextureManager;
 import hu.appropati.szunyog.graphics.text.FontStyle;
 import hu.appropati.szunyog.graphics.text.TextRenderer;
 import hu.appropati.szunyog.gui.GuiScreen;
-import hu.appropati.szunyog.input.InputHandler;
+import hu.appropati.szunyog.gui.elements.GuiButton;
+import lombok.NoArgsConstructor;
 
-public class CreditsScreen extends GuiScreen implements InputHandler {
+public class CreditsScreen extends GuiScreen {
     private Viewport viewport;
     private TextRenderer textRenderer;
 
     private Texture backgroundTexture;
     private Vector2 backgroundSize;
 
-    private String creditsText = "Jelentem alássan cikis ügy, de nincs meg a file amiben ennek a szövegnek lennie kellene";
-    private float textY = 0;
+    private LinkedList<Paragraph> data = new LinkedList<>();
+    private List<EasterEggHolder> easterEggData = new ArrayList<>();
+
+    private float headerY = 0;
 
     @Override
     public void show() {
@@ -37,20 +48,40 @@ public class CreditsScreen extends GuiScreen implements InputHandler {
 
         backgroundTexture = textureManager.getTexture("gui/background.jpg");
 
-        trainer.setBackgroundMusic(trainer.getAssetManager().get("audio/music.ogg", Music.class));
-
-        if(trainer.getPreferences().getBoolean("audio")) {
-            trainer.playBackgroundMusic();
-        }
-
         scaleBackground();
 
-        FileHandle creditsFile = Gdx.files.internal("credits");
+        FileHandle creditsFile = Gdx.files.internal("credits.json");
+
         if(creditsFile.exists()) {
-            creditsText = creditsFile.readString("UTF-8");
+            Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+            List<Paragraph> tempData = gson.fromJson(creditsFile.readString(), new TypeToken<List<Paragraph>>(){}.getType());
+
+            float currentY = 0;
+            for(int i = 0; i < tempData.size(); i++) {
+                Paragraph paragraph = tempData.get(i);
+                paragraph.y = currentY;
+                paragraph.init();
+                currentY -= paragraph.getTotalHeight() + 100;
+
+                if(paragraph.twitterButton != null) {
+                    createElement(paragraph.twitterButton);
+                }
+
+                if(paragraph.instagramButton != null) {
+                    createElement(paragraph.instagramButton);
+                }
+
+                data.add(paragraph);
+            }
         }
 
-        trainer.getInputHandler().addInputHandler(this);
+        float easterEggY = -4500;
+        for(int i = 0; i < 4; i++) {
+            Texture texture = textureManager.getTexture("credits/easteregg/" + i + ".jpg");
+            EasterEggHolder holder = new EasterEggHolder(texture, easterEggY);
+            easterEggY -= holder.textureSize.y + 50;
+            easterEggData.add(holder);
+        }
     }
 
     @Override
@@ -59,21 +90,28 @@ public class CreditsScreen extends GuiScreen implements InputHandler {
         spriteBatch.draw(backgroundTexture, viewport.getWorldWidth() / 2 - backgroundSize.x / 2, viewport.getWorldHeight() / 2 - backgroundSize.y / 2, backgroundSize.x, backgroundSize.y);
         spriteBatch.setColor(1f, 1f, 1f, 1f);
 
-        textY += 50 * Gdx.graphics.getDeltaTime();
-        textRenderer.drawCenteredText("Appropati Szúnyogfitnesz", viewport.getWorldWidth() / 2, textY, 50, "Maiandra", FontStyle.BOLD, Color.WHITE);
-        textRenderer.drawWrappedText(creditsText, 0, textY - 66, 32, "Maiandra", FontStyle.NORMAL, Color.WHITE, viewport.getWorldWidth(), Align.center);
-    }
+        float movement = 50 * Gdx.graphics.getDeltaTime();
 
-    @Override
-    public boolean tap(float x, float y, int count, int button) {
-        Trainer.getTrainer().setScreen(new SettingsScreen());
+        headerY += movement;
 
-        return true;
+        textRenderer.drawCenteredText("Appropati Szúnyogfitnesz", viewport.getWorldWidth() / 2, headerY + 50, 46, "Maiandra", FontStyle.BOLD, Color.WHITE);
+
+        drawElements(spriteBatch);
+
+        data.forEach((it) -> it.adjustY(movement));
+        data.forEach(Paragraph::drawText);
+
+        easterEggData.forEach((it) -> it.adjustY(movement));
+        easterEggData.forEach((it) -> it.draw(spriteBatch));
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.BACK)) {
+            Trainer.getTrainer().setScreen(new SettingsScreen());
+        }
     }
 
     @Override
     public void hide() {
-        Trainer.getTrainer().getInputHandler().removeInputHandler(this);
+
     }
 
     private void scaleBackground() {
@@ -85,6 +123,118 @@ public class CreditsScreen extends GuiScreen implements InputHandler {
         } else if(viewport.getWorldHeight() > backgroundTexture.getHeight()) {
             float ratio = viewport.getWorldHeight() / backgroundTexture.getHeight();
             backgroundSize.scl(ratio);
+        }
+    }
+
+    @NoArgsConstructor
+    private static class Paragraph {
+        private static Texture twitterIcon;
+        private static Texture instagramIcon;
+
+        @Expose
+        private String text;
+
+        @Expose
+        private String instagram;
+
+        @Expose
+        private String twitter;
+
+        private Vector2 textSize;
+        private float y;
+
+        private GuiButton twitterButton;
+        private GuiButton instagramButton;
+
+        private void init() {
+            TextRenderer textRenderer = Trainer.getTrainer().getTextRenderer();
+            Viewport viewport = Trainer.getTrainer().getViewport();
+            TextureManager textureManager = Trainer.getTrainer().getTextureManager();
+
+            if(twitterIcon == null) {
+                twitterIcon = textureManager.getTexture("credits/twitter.png");
+            }
+
+            if(instagramIcon == null) {
+                instagramIcon = textureManager.getTexture("credits/instagram.png");
+            }
+
+            textSize = textRenderer.getWrappedTextSize(text, "Niramit", FontStyle.NORMAL, 26, viewport.getWorldWidth() - 20, Align.center);
+
+            float buttonY = y - 110 - textSize.y;
+            float buttonWidth = 335;
+
+            if(instagram == null && twitter != null) {
+                twitterButton = new GuiButton(viewport.getWorldWidth() / 2 - buttonWidth / 2, buttonY, buttonWidth, 72, "@" + twitter, GuiButton.Style.builder().build(), twitterIcon);
+            } else if(instagram != null && twitter == null) {
+                instagramButton = new GuiButton(viewport.getWorldWidth() / 2 - buttonWidth / 2, buttonY, buttonWidth, 72, "@" + instagram, GuiButton.Style.builder().build(), instagramIcon);
+            } else if(instagram != null) {
+                twitterButton = new GuiButton(viewport.getWorldWidth() / 2 - buttonWidth - 5, buttonY, buttonWidth, 72, "@" + twitter, GuiButton.Style.builder().build(), twitterIcon);
+                instagramButton = new GuiButton(viewport.getWorldWidth() / 2 + 5, buttonY, buttonWidth, 72, "@" + instagram, GuiButton.Style.builder().build(), instagramIcon);
+            }
+
+            if(instagramButton != null) {
+                instagramButton.onClick((longPress) -> Trainer.getTrainer().getPlatform().openURL("https://www.instagram.com/" + instagram));
+            }
+
+            if(twitterButton != null) {
+                twitterButton.onClick((longPress) -> Trainer.getTrainer().getPlatform().openURL("https://www.twitter.com/" + instagram));
+            }
+        }
+
+        private void adjustY(float y) {
+            this.y += y;
+
+            if(twitterButton != null) {
+                twitterButton.setY(twitterButton.getY() + y);
+            }
+
+            if(instagramButton != null) {
+                instagramButton.setY(instagramButton.getY() + y);
+            }
+        }
+
+        private void drawText() {
+            TextRenderer textRenderer = Trainer.getTrainer().getTextRenderer();
+            Viewport viewport = Trainer.getTrainer().getViewport();
+
+            textRenderer.drawWrappedText(text, 20, y, 26, "Niramit", FontStyle.NORMAL, Color.WHITE, viewport.getWorldWidth() - 20, Align.center);
+        }
+
+        private float getTotalHeight() {
+            return 110 + textSize.y;
+        }
+    }
+
+    private static class EasterEggHolder {
+        private final Texture texture;
+
+        private Vector2 textureSize;
+        private float y;
+
+        private EasterEggHolder(Texture texture, float y) {
+            this.texture = texture;
+            this.y = y;
+
+            Viewport viewport = Trainer.getTrainer().getViewport();
+
+            float newWidth = viewport.getWorldWidth() - 40;
+
+            float widthRatio = newWidth / texture.getWidth();
+            float heightRatio = viewport.getWorldHeight() / texture.getHeight();
+            float ratio = Math.min(widthRatio, heightRatio);
+
+            textureSize = new Vector2(ratio * texture.getWidth(), ratio * texture.getHeight());
+        }
+
+        private void draw(SpriteBatch spriteBatch) {
+            Viewport viewport = Trainer.getTrainer().getViewport();
+
+            spriteBatch.draw(texture, viewport.getWorldWidth() / 2 - textureSize.x / 2, y - textureSize.y, textureSize.x, textureSize.y);
+        }
+
+        private void adjustY(float y) {
+            this.y += y;
         }
     }
 }

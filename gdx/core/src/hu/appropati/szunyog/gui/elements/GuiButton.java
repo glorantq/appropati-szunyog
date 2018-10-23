@@ -139,7 +139,7 @@ public class GuiButton implements GuiElement, InputHandler {
         if(icon != null) {
             Vector2 iconPosition = new Vector2();
             if(textSize.x > 0) {
-                iconPosition.set(x + width / 2 - textSize.x / 2 - imageSize.x - 5, y + height / 2 - imageSize.y / 2);
+                iconPosition.set(x + 20, y + height / 2 - imageSize.y / 2);
             } else {
                 iconPosition.set(x + width / 2 - imageSize.x / 2, y + height / 2 - imageSize.y / 2);
             }

@@ -59,21 +59,21 @@ public class CalculationDataScreen extends MenuScreen {
         float inputWidth = 350;
         float inputHeight = 95;
 
-        flySpeedInput = new GuiTextInput(viewport.getWorldWidth() / 2 - inputWidth / 2, viewport.getWorldHeight() / 2 - inputHeight / 2, inputWidth, inputHeight, "Szúnyog Sebessége", TextInputProvider.InputType.NUMBER, 3, this);
+        flySpeedInput = new GuiTextInput(viewport.getWorldWidth() / 2 - inputWidth / 2, viewport.getWorldHeight() / 2 - inputHeight / 2, inputWidth, inputHeight, "Szúnyog Sebessége", "m/s", TextInputProvider.InputType.NUMBER, 3, this);
 
         if (calculationTarget == CalculationParameter.Type.START_TIME) {
-            flyTravelDistanceInput = new GuiTextInput(flySpeedInput.getX(), flySpeedInput.getY() + inputHeight + 5, inputWidth, inputHeight, "Céltávolság", TextInputProvider.InputType.NUMBER, 3, this);
+            flyTravelDistanceInput = new GuiTextInput(flySpeedInput.getX(), flySpeedInput.getY() + inputHeight + 5, inputWidth, inputHeight, "Céltávolság", "m", TextInputProvider.InputType.NUMBER, 3, this);
         }
 
-        humansDistanceInput = new GuiTextInput(flySpeedInput.getX(), (flyTravelDistanceInput == null ? flySpeedInput.getY() : flyTravelDistanceInput.getY()) + inputHeight + 5, inputWidth, inputHeight, "Emberek Távolsága", TextInputProvider.InputType.NUMBER, 3, this);
-        speedHumanA = new GuiTextInput(humansDistanceInput.getX(), humansDistanceInput.getY() + inputHeight + 5, inputWidth / 2 - 2, inputHeight, "A Sebessége", TextInputProvider.InputType.NUMBER, 3, this);
-        speedHumanB = new GuiTextInput(speedHumanA.getX() + speedHumanA.getWidth() + 5, speedHumanA.getY(), speedHumanA.getWidth(), speedHumanA.getHeight(), "B Sebessége", TextInputProvider.InputType.NUMBER, 3, this);
+        humansDistanceInput = new GuiTextInput(flySpeedInput.getX(), (flyTravelDistanceInput == null ? flySpeedInput.getY() : flyTravelDistanceInput.getY()) + inputHeight + 5, inputWidth, inputHeight, "Emberek Távolsága", "m", TextInputProvider.InputType.NUMBER, 3, this);
+        speedHumanA = new GuiTextInput(humansDistanceInput.getX(), humansDistanceInput.getY() + inputHeight + 5, inputWidth / 2 - 2, inputHeight, "A Sebessége", "m/s", TextInputProvider.InputType.NUMBER, 3, this);
+        speedHumanB = new GuiTextInput(speedHumanA.getX() + speedHumanA.getWidth() + 5, speedHumanA.getY(), speedHumanA.getWidth(), speedHumanA.getHeight(), "B Sebessége", "m/s", TextInputProvider.InputType.NUMBER, 3, this);
 
         GuiButton.Style checkBoxStyle = GuiButton.Style.builder().fontColor(Color.WHITE).fontSize(26).fontName("Maiandra").build();
         windCheckBox = new GuiCheckBox(flySpeedInput.getX(), flySpeedInput.getY() - 5 - inputHeight / 1.3f, inputHeight / 1.3f, inputHeight / 1.3f, "Szél Engedélyezése", checkBoxStyle);
         windCheckBox.setX(viewport.getWorldWidth() / 2 - windCheckBox.getWidth() / 2);
 
-        windSpeedInput = new GuiTextInput(flySpeedInput.getX(), windCheckBox.getY() - inputHeight - 5, inputWidth / 2 - 2, inputHeight, "Szélsebesség", TextInputProvider.InputType.NUMBER, 3, this);
+        windSpeedInput = new GuiTextInput(flySpeedInput.getX(), windCheckBox.getY() - inputHeight - 5, inputWidth / 2 - 2, inputHeight, "Szélsebesség", "m/s", TextInputProvider.InputType.NUMBER, 3, this);
         windSpeedInput.setVisible(windCheckBox.isChecked());
 
         animationCheckBox = new GuiCheckBox(windSpeedInput.getX(), windCheckBox.getY() - 5 - inputHeight / 1.3f, inputHeight / 1.3f, inputHeight / 1.3f, "Út Animálása", checkBoxStyle);

@@ -36,12 +36,10 @@ public class GuiTextInput implements GuiElement, InputHandler {
     private TextRenderer textRenderer;
     private TextInputProvider textInputProvider;
 
-    @Setter
-    @Getter
+    @Setter @Getter
     private float x;
 
-    @Setter
-    @Getter
+    @Setter @Getter
     private float y;
 
     @Getter
@@ -52,10 +50,13 @@ public class GuiTextInput implements GuiElement, InputHandler {
 
     private final GuiScreen parent;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     private String text = "";
+
     private final String placeholder;
+
+    @Getter @Setter
+    private String suffix = "";
 
     private Rectangle bounds;
 
@@ -64,8 +65,7 @@ public class GuiTextInput implements GuiElement, InputHandler {
     private final TextInputProvider.InputType type;
     private final int maxChars;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     private boolean visible = true;
 
     public GuiTextInput(float x, float y, float width, float height, String placeholder, TextInputProvider.InputType type, int maxChars, GuiScreen parent) {
@@ -77,6 +77,12 @@ public class GuiTextInput implements GuiElement, InputHandler {
         this.type = type;
         this.parent = parent;
         this.maxChars = maxChars;
+    }
+
+    public GuiTextInput(float x, float y, float width, float height, String placeholder, String suffix, TextInputProvider.InputType type, int maxChars, GuiScreen parent) {
+        this(x, y, width, height, placeholder, type, maxChars, parent);
+
+        this.suffix = suffix;
     }
 
     @Override
@@ -118,7 +124,7 @@ public class GuiTextInput implements GuiElement, InputHandler {
         if (text.isEmpty() && !placeholder.isEmpty() && focusedElement != this) {
             textRenderer.drawCenteredText(placeholder, x + width / 2, y + height / 2 + 3, 26, "Maiandra", FontStyle.NORMAL, Color.LIGHT_GRAY);
         } else {
-            textRenderer.drawCenteredText(text, x + width / 2, y + height / 2 + 3, 26, "Maiandra", FontStyle.NORMAL, Color.WHITE);
+            textRenderer.drawCenteredText(text + " " + suffix, x + width / 2, y + height / 2 + 3, 26, "Maiandra", FontStyle.NORMAL, Color.WHITE);
         }
     }
 
