@@ -200,7 +200,7 @@ public class CreditsScreen extends GuiScreen {
             }
 
             if(twitterButton != null) {
-                twitterButton.onClick((longPress) -> Trainer.getTrainer().getPlatform().openURL("https://www.twitter.com/" + instagram));
+                twitterButton.onClick((longPress) -> Trainer.getTrainer().getPlatform().openURL("https://www.twitter.com/" + twitter));
             }
         }
 
@@ -237,7 +237,7 @@ public class CreditsScreen extends GuiScreen {
         }
 
         private float getTotalHeight() {
-            return 110 + textSize.y;
+            return (twitterButton != null || instagramButton != null ? 72 : 0) + 38 + textSize.y;
         }
     }
 
