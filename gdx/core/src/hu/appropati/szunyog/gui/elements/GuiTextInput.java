@@ -18,6 +18,15 @@ import hu.appropati.szunyog.input.text.TextInputProvider;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Szöveg vagy számbevitelre alkalmas mező
+ *
+ * @see hu.appropati.szunyog.gui.GuiScreen
+ * @see GuiElement
+ *
+ * @since 1.0
+ * @author Gerber Lóránt Viktor
+ */
 public class GuiTextInput implements GuiElement, InputHandler {
     private static boolean registeredListener = false;
     private static GuiTextInput focusedElement = null;

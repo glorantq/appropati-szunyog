@@ -2,6 +2,13 @@ package hu.appropati.szunyog.calculation;
 
 import lombok.Data;
 
+/**
+ * Számolás végeredménye
+ *
+ * @see hu.appropati.szunyog.screens.CalculationDataScreen
+ * @since 1.0
+ * @author Gerber Lóránt Viktor
+ */
 @Data
 public class CalculationParameter {
     public enum Type {

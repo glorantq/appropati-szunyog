@@ -32,6 +32,12 @@ import hu.appropati.szunyog.screens.MainScreen;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * A játék fő osztálya. Kezeli a képernyőket, mentést és egyéb rajzolást.
+ *
+ * @since 1.0
+ * @author Gerber Lóránt Viktor
+ */
 public class Trainer extends Game {
     public static int WIDTH = 720;
     public static int HEIGHT = 1280;

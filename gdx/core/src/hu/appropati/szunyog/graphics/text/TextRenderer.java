@@ -17,6 +17,12 @@ import java.util.concurrent.TimeUnit;
 
 import lombok.Data;
 
+/**
+ * Szövegrajzolásra használható osztály
+ *
+ * @since 1.0
+ * @author Gerber Lóránt Viktor
+ */
 public class TextRenderer {
     private final List<Font> loadedFonts = new CopyOnWriteArrayList<>();
 
@@ -34,12 +40,29 @@ public class TextRenderer {
         this.glyphLayout = new GlyphLayout();
     }
 
+    /**
+     * Hozzáad egy betűtípust a használhatóak közé
+     *
+     * @param font Betűtípus
+     */
     public void registerFont(Font font) {
         loadedFonts.add(font);
 
         logger.info("Loaded font: {}", font.getName());
     }
 
+    /**
+     * Egyszerű szöveg rajzolása
+     *
+     * @param text A szöveg
+     * @param x x koordináta
+     * @param y y koodináta
+     * @param size Betűk mérete
+     * @param fontName Betűtípus neve
+     * @param fontStyle Szöveg stílusa
+     * @param color Szöveg színe
+     * @param yBottom y origó helyzete
+     */
     public void drawText(String text, float x, float y, int size, String fontName, FontStyle fontStyle, Color color, boolean yBottom) {
         BitmapFont font = fontCache.get(new CacheLookup(fontName, fontStyle, size));
         if(font == null) {
@@ -54,6 +77,17 @@ public class TextRenderer {
         font.draw(spriteBatch, text, x, y);
     }
 
+    /**
+     * Középre igazított szöveg rajzolása
+     *
+     * @param text A szöveg
+     * @param x x koordináta
+     * @param y í koordináta
+     * @param size Betűk mérete
+     * @param fontName Betűtípus neve
+     * @param fontStyle Szöveg stílusa
+     * @param color Szöveg színe
+     */
     public void drawCenteredText(String text, float x, float y, int size, String fontName, FontStyle fontStyle, Color color) {
         BitmapFont font = fontCache.get(new CacheLookup(fontName, fontStyle, size));
         if(font == null) {
@@ -69,6 +103,18 @@ public class TextRenderer {
         font.draw(spriteBatch, text, x, y);
     }
 
+    /**
+     * Jobbra igazított szöveg rajzolása
+     *
+     * @param text A szöveg
+     * @param x x koordináta
+     * @param y y koodináta
+     * @param size Betűk mérete
+     * @param fontName Betűtípus neve
+     * @param fontStyle Szöveg stílusa
+     * @param color Szöveg színe
+     * @param yBottom y origó helyzete
+     */
     public void drawRightText(String text, float x, float y, int size, String fontName, FontStyle fontStyle, Color color, boolean yBottom) {
         BitmapFont font = fontCache.get(new CacheLookup(fontName, fontStyle, size));
         if(font == null) {
@@ -87,6 +133,21 @@ public class TextRenderer {
         font.draw(spriteBatch, text, x, y);
     }
 
+    /**
+     * Sortöréseket támogató szöveg rajzolása
+     *
+     * @see com.badlogic.gdx.utils.Align
+     *
+     * @param text A szöveg
+     * @param x x koordináta
+     * @param y y koordináta
+     * @param size Betűk mérete
+     * @param fontName Betűtípus neve
+     * @param fontStyle Szöveg stílusa
+     * @param color Szöveg színe
+     * @param width Maximális szélesség
+     * @param align Igazítás
+     */
     public void drawWrappedText(String text, float x, float y, int size, String fontName, FontStyle fontStyle, Color color, float width, int align) {
         BitmapFont font = fontCache.get(new CacheLookup(fontName, fontStyle, size));
         if(font == null) {
@@ -97,6 +158,16 @@ public class TextRenderer {
         font.draw(spriteBatch, text, x, y, width, align, true);
     }
 
+    /**
+     * Megadja egy szöveg méretét
+     *
+     * @param text A szöveg
+     * @param fontName Betűtípus
+     * @param fontStyle Szöveg stílusa
+     * @param size Betűk mérete
+     *
+     * @return Szöveg méretei pixelben
+     */
     public Vector2 getTextSize(String text, String fontName, FontStyle fontStyle, int size) {
         if(text.isEmpty()) {
             return Vector2.Zero;
@@ -112,6 +183,20 @@ public class TextRenderer {
         return new Vector2(glyphLayout.width, glyphLayout.height);
     }
 
+    /**
+     * Megadja egy szöveg méretét sortörésekkel együtt
+     *
+     * @see com.badlogic.gdx.utils.Align
+     *
+     * @param text A szöveg
+     * @param fontName Betűtypus
+     * @param fontStyle Szöveg stílusa
+     * @param size Betűk mérete
+     * @param width Maximális szélesség
+     * @param align Igazítás
+     *
+     * @return Szöveg méretei pixelben
+     */
     public Vector2 getWrappedTextSize(String text, String fontName, FontStyle fontStyle, int size, float width, int align) {
         if(text.isEmpty()) {
             return Vector2.Zero;

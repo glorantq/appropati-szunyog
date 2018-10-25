@@ -11,6 +11,12 @@ import org.slf4j.LoggerFactory;
 
 import lombok.Getter;
 
+/**
+ * Textúrák betöltése
+ *
+ * @since 1.0
+ * @author Gerber Lóránt Viktor
+ */
 public class TextureManager {
     private static TextureManager INSTANCE;
     public static TextureManager create(AssetManager assetManager) {
@@ -52,6 +58,16 @@ public class TextureManager {
         this.white = new TextureRegion(new Texture(whitePixmap));
     }
 
+    /**
+     * Betölt egy textúrát
+     *  Ha előre be van töltve, azt használja
+     *  Ha nincs betöltve, betölti
+     *  Ha érvénytelen a név, egy alap textúrát ad vissza
+     *
+     * @param name Fájl neve
+     *
+     * @return A textúra
+     */
     public Texture getTexture(String name) {
         Texture texture = getTexture0(name);
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);

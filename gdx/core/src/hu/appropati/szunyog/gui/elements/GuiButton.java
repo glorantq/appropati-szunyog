@@ -22,6 +22,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Egy gomb
+ *
+ * @see hu.appropati.szunyog.gui.GuiScreen
+ * @see GuiElement
+ *
+ * @since 1.0
+ * @author Gerber Lóránt Viktor
+ */
 public class GuiButton implements GuiElement, InputHandler {
     private GdxInputHandler inputHandler;
     private TextRenderer textRenderer;

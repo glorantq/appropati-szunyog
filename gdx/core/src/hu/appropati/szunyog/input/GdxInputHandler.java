@@ -11,6 +11,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import hu.appropati.szunyog.Trainer;
 
+/**
+ * Egér/értintőképernyős bevitel kezelése
+ *
+ * @since 1.0
+ * @author Gerber Lóránt Viktor
+ */
 public class GdxInputHandler implements GestureDetector.GestureListener, InputProcessor {
     private final Viewport viewport = Trainer.getTrainer().getViewport();
     private final List<InputHandler> inputHandlers = new CopyOnWriteArrayList<>();

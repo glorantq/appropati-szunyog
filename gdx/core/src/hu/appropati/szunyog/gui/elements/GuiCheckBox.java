@@ -17,13 +17,21 @@ import hu.appropati.szunyog.input.InputHandler;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Szimpla jelölőnégyzet
+ *
+ * @see hu.appropati.szunyog.gui.GuiScreen
+ * @see GuiElement
+ *
+ * @since 1.0
+ * @author Gerber Lóránt Viktor
+ */
 public class GuiCheckBox implements GuiElement, InputHandler {
     private GdxInputHandler inputHandler;
     private TextRenderer textRenderer;
     private Trainer trainer = Trainer.getTrainer();
 
-    @Setter
-    @Getter
+    @Setter @Getter
     private float x;
 
     @Setter @Getter
@@ -42,8 +50,7 @@ public class GuiCheckBox implements GuiElement, InputHandler {
     private Texture checkmarkTexture;
     private final GuiButton.Style style;
 
-    @Getter
-    @Setter
+    @Getter @Setter
     private boolean checked = false;
 
     private Consumer<Boolean> onStateChange;

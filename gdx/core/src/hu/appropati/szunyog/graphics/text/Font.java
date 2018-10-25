@@ -9,6 +9,12 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 import lombok.Getter;
 
+/**
+ * Egy játék által használható TrueType betűtípus
+ *
+ * @since 1.0
+ * @author Gerber Lóránt Viktor
+ */
 @Getter
 public class Font {
     private static final String CHARSET = "0123456789qwertzuiopőúasdfghjkléáűíyxcvbnmöüóÖÜÓQWERTZUIOPŐÚASDFGHJKLÉÁŰÍYXCVBNM,.-?:_;>*\\|$ß@&#><{}'\"+!%/=()©";
@@ -27,6 +33,12 @@ public class Font {
         this.name = name;
     }
 
+    /**
+     * LibGDX által használható betűtípust generál egy megadott stílusra és méretre
+     * @param style Stílus
+     * @param size Méret
+     * @return Rajzolásra kész betűtípus
+     */
     BitmapFont getFont(FontStyle style, int size) {
         FileHandle handle = getHandle(style);
         if(handle == null || !handle.exists()) {
@@ -48,6 +60,11 @@ public class Font {
         return font;
     }
 
+    /**
+     * A fájl egy adott stílushoz
+     * @param style Stílus
+     * @return .ttf fájl
+     */
     private FileHandle getHandle(FontStyle style) {
         switch (style) {
             case NORMAL:
@@ -62,11 +79,5 @@ public class Font {
             default:
                 return null;
         }
-    }
-
-    public boolean supportsStyle(FontStyle style) {
-        FileHandle handle = getHandle(style);
-
-        return handle != null && handle.exists();
     }
 }

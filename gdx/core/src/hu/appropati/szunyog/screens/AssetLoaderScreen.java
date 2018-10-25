@@ -54,7 +54,7 @@ public class AssetLoaderScreen extends GuiScreen {
         }
 
         float progress = assetManager.getProgress();
-        logger.debug("Loading progress: {}", progress);
+        logger.debug("Loading progress: {}%", Math.round(progress * 100));
     }
 
     @Override

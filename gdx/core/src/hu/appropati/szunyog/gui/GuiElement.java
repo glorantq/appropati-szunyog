@@ -2,6 +2,12 @@ package hu.appropati.szunyog.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * Egy GUI építőeleme
+ *
+ * @since 1.0
+ * @author Gerber Lóránt Viktor
+ */
 public interface GuiElement {
     void create();
     void destroy();

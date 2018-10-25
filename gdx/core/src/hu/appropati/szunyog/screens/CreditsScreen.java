@@ -68,7 +68,7 @@ public class CreditsScreen extends GuiScreen {
             }
         }
 
-        float easterEggY = -4500;
+        float easterEggY = currentY - (30 * 50);
         for(int i = 0; i < easterEggData.size(); i++) {
             EasterEggHolder holder = easterEggData.get(i);
             holder.y = easterEggY;
