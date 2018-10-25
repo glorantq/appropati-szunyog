@@ -33,7 +33,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * A játék fő osztálya. Kezeli a képernyőket, mentést és egyéb rajzolást.
+ * A játék fő osztálya. Kezeli a képernyőket, mentést és egyéb rajzolást.<br>
+ * Extra funkciók:
+ * <ul>
+ *     <li>Szél</li>
+ *     <li>Animáció</li>
+ *     <li>Zene</li>
+ *     <li>Távolság kiszámítása</li>
+ * </ul>
  *
  * @since 1.0
  * @author Gerber Lóránt Viktor

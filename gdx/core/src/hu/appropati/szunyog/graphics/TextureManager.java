@@ -59,10 +59,12 @@ public class TextureManager {
     }
 
     /**
-     * Betölt egy textúrát
-     *  Ha előre be van töltve, azt használja
-     *  Ha nincs betöltve, betölti
-     *  Ha érvénytelen a név, egy alap textúrát ad vissza
+     * Betölt egy textúrát<br>
+     * <ul>
+     *  <li>Ha előre be van töltve, azt használja</li>
+     *  <li>Ha nincs betöltve, betölti</li>
+     *  <li>Ha érvénytelen a név, egy alap textúrát ad vissza</li>
+     * </ul>
      *
      * @param name Fájl neve
      *
